@@ -54,19 +54,27 @@ function Navigation() {
   );
 }
 
+function LayoutContent({ children }: { children: React.ReactNode }) {
+  return (
+    <>
+      <Navigation />
+      <main>{children}</main>
+      <Toaster position="top-right" />
+    </>
+  );
+}
+
 export default function RootLayout({
   children,
 }: Readonly<{
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en">
+    <html lang="en" suppressHydrationWarning>
       <body className="min-h-screen bg-gray-50 dark:bg-gray-900 transition-colors">
         <SessionProvider>
           <ThemeProvider>
-            <Navigation />
-            <main>{children}</main>
-            <Toaster position="top-right" />
+            <LayoutContent>{children}</LayoutContent>
           </ThemeProvider>
         </SessionProvider>
       </body>
