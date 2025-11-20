@@ -31,6 +31,7 @@ export default function ProductsPage() {
   const [selectedCat2, setSelectedCat2] = useState('');
   const [selectedCat3, setSelectedCat3] = useState('');
   const [search, setSearch] = useState('');
+  const [searchInput, setSearchInput] = useState('');
   const [sort, setSort] = useState('newest');
   const [loading, setLoading] = useState(true);
 
@@ -39,9 +40,19 @@ export default function ProductsPage() {
     fetchProducts();
   }, []);
 
+  // Debounce search input
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      setSearch(searchInput);
+    }, 500);
+    return () => clearTimeout(timer);
+  }, [searchInput]);
+
   useEffect(() => {
     if (selectedCat1) {
       fetchCategories2(selectedCat1);
+      setSelectedCat2('');
+      setSelectedCat3('');
     } else {
       setCategories2([]);
       setSelectedCat2('');
@@ -53,6 +64,7 @@ export default function ProductsPage() {
   useEffect(() => {
     if (selectedCat2) {
       fetchCategories3(selectedCat2);
+      setSelectedCat3('');
     } else {
       setCategories3([]);
       setSelectedCat3('');
@@ -129,6 +141,7 @@ export default function ProductsPage() {
     setSelectedCat2('');
     setSelectedCat3('');
     setSearch('');
+    setSearchInput('');
     setSort('newest');
   };
 
@@ -158,8 +171,8 @@ export default function ProductsPage() {
                 </label>
                 <input
                   type="text"
-                  value={search}
-                  onChange={(e) => setSearch(e.target.value)}
+                  value={searchInput}
+                  onChange={(e) => setSearchInput(e.target.value)}
                   placeholder="Search products..."
                   className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent bg-white dark:bg-gray-700 text-gray-900 dark:text-white placeholder-gray-500 dark:placeholder-gray-400"
                 />

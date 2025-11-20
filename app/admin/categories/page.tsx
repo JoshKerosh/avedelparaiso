@@ -245,48 +245,48 @@ export default function AdminCategoriesPage() {
               <p className="text-gray-500">Loading categories...</p>
             </div>
           ) : (
-            <div className="bg-white rounded-lg shadow">
+            <div className="bg-white dark:bg-gray-800 rounded-lg shadow">
               {categories1.length === 0 ? (
                 <div className="p-8 text-center">
-                  <p className="text-gray-500">No categories yet. Create your first category to get started.</p>
+                  <p className="text-gray-500 dark:text-gray-400">No categories yet. Create your first category to get started.</p>
                 </div>
               ) : (
-                <div className="divide-y divide-gray-200">
+                <div className="divide-y divide-gray-200 dark:divide-gray-700">
                   {categories1.map((cat1) => (
                     <div key={cat1._id}>
                       {/* Level 1 Category */}
-                      <div className="p-4 hover:bg-gray-50">
+                      <div className="p-4 hover:bg-gray-50 dark:hover:bg-gray-700">
                         <div className="flex items-center justify-between">
                           <div className="flex items-center flex-1">
                             <button
                               onClick={() => toggleCategory1(cat1._id)}
-                              className="mr-2 text-gray-500 hover:text-gray-700"
+                              className="mr-2 text-gray-500 dark:text-gray-400 hover:text-gray-700 dark:hover:text-gray-300"
                             >
                               {expandedCat1.has(cat1._id) ? '▼' : '▶'}
                             </button>
                             <div className="flex-1">
-                              <h3 className="font-semibold text-gray-900">{cat1.name}</h3>
+                              <h3 className="font-semibold text-gray-900 dark:text-white">{cat1.name}</h3>
                               {cat1.description && (
-                                <p className="text-sm text-gray-600">{cat1.description}</p>
+                                <p className="text-sm text-gray-600 dark:text-gray-400">{cat1.description}</p>
                               )}
                             </div>
                           </div>
                           <div className="flex items-center gap-2">
                             <button
                               onClick={() => openAddModal(2, cat1._id)}
-                              className="px-3 py-1 text-sm bg-green-600 text-white rounded hover:bg-green-700"
+                              className="px-3 py-1 text-sm bg-green-600 dark:bg-green-500 text-white rounded hover:bg-green-700 dark:hover:bg-green-600"
                             >
                               Add Subcategory
                             </button>
                             <button
                               onClick={() => openEditModal(cat1)}
-                              className="px-3 py-1 text-sm bg-gray-600 text-white rounded hover:bg-gray-700"
+                              className="px-3 py-1 text-sm bg-gray-600 dark:bg-gray-500 text-white rounded hover:bg-gray-700 dark:hover:bg-gray-600"
                             >
                               Edit
                             </button>
                             <button
                               onClick={() => handleDelete(cat1)}
-                              className="px-3 py-1 text-sm bg-red-600 text-white rounded hover:bg-red-700"
+                              className="px-3 py-1 text-sm bg-red-600 dark:bg-red-500 text-white rounded hover:bg-red-700 dark:hover:bg-red-600"
                             >
                               Delete
                             </button>
@@ -296,7 +296,7 @@ export default function AdminCategoriesPage() {
 
                       {/* Level 2 Categories */}
                       {expandedCat1.has(cat1._id) && categories2[cat1._id] && (
-                        <div className="ml-8 border-l-2 border-gray-200">
+                        <div className="ml-8 border-l-2 border-gray-200 dark:border-gray-700">
                           {categories2[cat1._id].map((cat2) => (
                             <div key={cat2._id}>
                               <div className="p-4 hover:bg-gray-50">

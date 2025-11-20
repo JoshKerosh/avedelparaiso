@@ -18,21 +18,44 @@ export async function GET(request: NextRequest) {
     const query: any = {};
 
     if (search) {
-      query.$text = { $search: search };
+      query.$or = [
+        { name: { $regex: search, $options: 'i' } },
+        { description: { $regex: search, $options: 'i' } }
+      ];
     }
 
     // Category filtering with level + children logic
     if (category3) {
-      query.category3Id = category3;
+      if (search) {
+        query.$and = [
+          { $or: query.$or },
+          { category3Id: category3 }
+        ];
+        delete query.$or;
+      } else {
+        query.category3Id = category3;
+      }
     } else if (category2) {
       // Get all level 3 categories under this level 2
       const level3Categories = await Category.find({ parentId: category2, level: 3 });
       const level3Ids = level3Categories.map(cat => cat._id);
       
-      query.$or = [
-        { category2Id: category2, category3Id: null },
-        { category3Id: { $in: level3Ids } }
-      ];
+      const categoryCondition = {
+        $or: [
+          { category2Id: category2, category3Id: null },
+          { category3Id: { $in: level3Ids } }
+        ]
+      };
+
+      if (search) {
+        query.$and = [
+          { $or: query.$or },
+          categoryCondition
+        ];
+        delete query.$or;
+      } else {
+        query.$or = categoryCondition.$or;
+      }
     } else if (category1) {
       // Get all level 2 and 3 categories under this level 1
       const level2Categories = await Category.find({ parentId: category1, level: 2 });
@@ -41,11 +64,23 @@ export async function GET(request: NextRequest) {
       const level3Categories = await Category.find({ parentId: { $in: level2Ids }, level: 3 });
       const level3Ids = level3Categories.map(cat => cat._id);
       
-      query.$or = [
-        { category1Id: category1, category2Id: null },
-        { category2Id: { $in: level2Ids }, category3Id: null },
-        { category3Id: { $in: level3Ids } }
-      ];
+      const categoryCondition = {
+        $or: [
+          { category1Id: category1, category2Id: null },
+          { category2Id: { $in: level2Ids }, category3Id: null },
+          { category3Id: { $in: level3Ids } }
+        ]
+      };
+
+      if (search) {
+        query.$and = [
+          { $or: query.$or },
+          categoryCondition
+        ];
+        delete query.$or;
+      } else {
+        query.$or = categoryCondition.$or;
+      }
     }
 
     // Sorting

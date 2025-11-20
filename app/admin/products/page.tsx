@@ -296,26 +296,26 @@ export default function AdminProductsPage() {
 
           {loading ? (
             <div className="text-center py-12">
-              <p className="text-gray-500">Loading products...</p>
+              <p className="text-gray-500 dark:text-gray-400">Loading products...</p>
             </div>
           ) : products.length === 0 ? (
-            <div className="bg-white rounded-lg shadow p-8 text-center">
-              <p className="text-gray-500">No products yet. Create your first product to get started.</p>
+            <div className="bg-white dark:bg-gray-800 rounded-lg shadow p-8 text-center">
+              <p className="text-gray-500 dark:text-gray-400">No products yet. Create your first product to get started.</p>
             </div>
           ) : (
-            <div className="bg-white rounded-lg shadow overflow-hidden">
+            <div className="bg-white dark:bg-gray-800 rounded-lg shadow overflow-hidden">
               <div className="overflow-x-auto">
-                <table className="min-w-full divide-y divide-gray-200">
-                  <thead className="bg-gray-50">
+                <table className="min-w-full divide-y divide-gray-200 dark:divide-gray-700">
+                  <thead className="bg-gray-50 dark:bg-gray-700">
                     <tr>
-                      <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Image</th>
-                      <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Name</th>
-                      <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Price</th>
-                      <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Stock</th>
-                      <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Actions</th>
+                      <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase">Image</th>
+                      <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase">Name</th>
+                      <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase">Price</th>
+                      <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase">Stock</th>
+                      <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase">Actions</th>
                     </tr>
                   </thead>
-                  <tbody className="bg-white divide-y divide-gray-200">
+                  <tbody className="bg-white dark:bg-gray-800 divide-y divide-gray-200 dark:divide-gray-700">
                     {products.map((product) => {
                       const mainImage = product.images?.find((img) => img.isMain)?.url || product.images?.[0]?.url;
                       return (
@@ -328,10 +328,10 @@ export default function AdminProductsPage() {
                             )}
                           </td>
                           <td className="px-6 py-4">
-                            <div className="text-sm font-medium text-gray-900">{product.name}</div>
-                            <div className="text-sm text-gray-500 line-clamp-1">{product.description}</div>
+                            <div className="text-sm font-medium text-gray-900 dark:text-white">{product.name}</div>
+                            <div className="text-sm text-gray-500 dark:text-gray-400 line-clamp-1">{product.description}</div>
                           </td>
-                          <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
+                          <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900 dark:text-white">
                             ${product.price.toFixed(2)}
                           </td>
                           <td className="px-6 py-4 whitespace-nowrap">
@@ -568,7 +568,7 @@ export default function AdminProductsPage() {
                     <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase">User</th>
                   </tr>
                 </thead>
-                <tbody className="bg-white divide-y divide-gray-200">
+                <tbody className="bg-white dark:bg-gray-800 divide-y divide-gray-200 dark:divide-gray-700">
                   {history.map((item) => (
                     <tr key={item._id}>
                       <td className="px-4 py-3 text-sm text-gray-900">
