@@ -95,21 +95,21 @@ export default function AdminSettingsPage() {
 
   return (
     <ProtectedRoute>
-      <div className="min-h-screen bg-gray-50">
+      <div className="min-h-screen bg-gray-50 dark:bg-gray-900">
         <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
           <div className="mb-8">
-            <h1 className="text-3xl font-bold text-gray-900">Settings</h1>
-            <p className="mt-2 text-gray-600">Manage your site settings</p>
+            <h1 className="text-3xl font-bold text-gray-900 dark:text-white">Settings</h1>
+            <p className="mt-2 text-gray-600 dark:text-gray-400">Manage your site settings</p>
           </div>
 
           {loading ? (
             <div className="text-center py-12">
-              <p className="text-gray-500">Loading settings...</p>
+              <p className="text-gray-500 dark:text-gray-400">Loading settings...</p>
             </div>
           ) : (
-            <div className="bg-white rounded-lg shadow p-6">
-              <h2 className="text-xl font-semibold text-gray-900 mb-4">Hero Banner</h2>
-              <p className="text-gray-600 mb-6">
+            <div className="bg-white dark:bg-gray-800 rounded-lg shadow p-6">
+              <h2 className="text-xl font-semibold text-gray-900 dark:text-white mb-4">Hero Banner</h2>
+              <p className="text-gray-600 dark:text-gray-400 mb-6">
                 Upload an image to display at the top of your homepage. Recommended size: 1920x600px
               </p>
 

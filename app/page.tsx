@@ -50,10 +50,10 @@ export default function Home() {
   };
 
   return (
-    <div className="min-h-screen bg-gray-50">
+    <div className="min-h-screen bg-gray-50 dark:bg-gray-900">
       {/* Hero Banner */}
       {settings.heroBannerUrl && (
-        <div className="relative w-full h-96 bg-gray-200">
+        <div className="relative w-full h-96 bg-gray-200 dark:bg-gray-700">
           <Image
             src={settings.heroBannerUrl}
             alt="Hero Banner"
@@ -67,18 +67,18 @@ export default function Home() {
       {/* Featured Products */}
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
         <div className="mb-8">
-          <h2 className="text-3xl font-bold text-gray-900">Featured Products</h2>
-          <p className="mt-2 text-gray-600">Check out our latest inventory</p>
+          <h2 className="text-3xl font-bold text-gray-900 dark:text-white">Featured Products</h2>
+          <p className="mt-2 text-gray-600 dark:text-gray-400">Check out our latest inventory</p>
         </div>
 
         {loading ? (
           <div className="text-center py-12">
-            <p className="text-gray-500">Loading products...</p>
+            <p className="text-gray-500 dark:text-gray-400">Loading products...</p>
           </div>
         ) : products.length === 0 ? (
           <div className="text-center py-12">
-            <p className="text-gray-500">No products available yet.</p>
-            <Link href="/admin" className="mt-4 inline-block text-blue-600 hover:text-blue-700">
+            <p className="text-gray-500 dark:text-gray-400">No products available yet.</p>
+            <Link href="/admin" className="mt-4 inline-block text-blue-600 dark:text-blue-400 hover:text-blue-700 dark:hover:text-blue-300">
               Add your first product →
             </Link>
           </div>
@@ -88,9 +88,9 @@ export default function Home() {
               <Link
                 key={product._id}
                 href={`/products/${product._id}`}
-                className="bg-white rounded-lg shadow hover:shadow-lg transition-shadow overflow-hidden group"
+                className="bg-white dark:bg-gray-800 rounded-lg shadow hover:shadow-lg transition-shadow overflow-hidden group"
               >
-                <div className="relative h-48 bg-gray-100">
+                <div className="relative h-48 bg-gray-100 dark:bg-gray-700">
                   <Image
                     src={getMainImage(product)}
                     alt={product.name}
@@ -99,11 +99,11 @@ export default function Home() {
                   />
                 </div>
                 <div className="p-4">
-                  <h3 className="font-semibold text-gray-900 line-clamp-2 mb-2">
+                  <h3 className="font-semibold text-gray-900 dark:text-white line-clamp-2 mb-2">
                     {product.name}
                   </h3>
                   <div className="flex justify-between items-center">
-                    <p className="text-lg font-bold text-blue-600">
+                    <p className="text-lg font-bold text-blue-600 dark:text-blue-400">
                       ${product.price.toFixed(2)}
                     </p>
                     <span
@@ -125,7 +125,7 @@ export default function Home() {
         <div className="mt-12 text-center">
           <Link
             href="/products"
-            className="inline-block px-8 py-3 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors"
+            className="inline-block px-8 py-3 bg-blue-600 dark:bg-blue-500 text-white rounded-lg hover:bg-blue-700 dark:hover:bg-blue-600 transition-colors"
           >
             View All Products
           </Link>

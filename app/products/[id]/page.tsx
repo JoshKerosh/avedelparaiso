@@ -45,18 +45,18 @@ export default function ProductDetailPage() {
 
   if (loading) {
     return (
-      <div className="min-h-screen bg-gray-50 flex items-center justify-center">
-        <p className="text-gray-500">Loading product...</p>
+      <div className="min-h-screen bg-gray-50 dark:bg-gray-900 flex items-center justify-center">
+        <p className="text-gray-500 dark:text-gray-400">Loading product...</p>
       </div>
     );
   }
 
   if (!product) {
     return (
-      <div className="min-h-screen bg-gray-50 flex items-center justify-center">
+      <div className="min-h-screen bg-gray-50 dark:bg-gray-900 flex items-center justify-center">
         <div className="text-center">
-          <p className="text-gray-500 mb-4">Product not found</p>
-          <Link href="/products" className="text-blue-600 hover:text-blue-700">
+          <p className="text-gray-500 dark:text-gray-400 mb-4">Product not found</p>
+          <Link href="/products" className="text-blue-600 dark:text-blue-400 hover:text-blue-700 dark:hover:text-blue-300">
             Back to Products
           </Link>
         </div>
@@ -74,15 +74,15 @@ export default function ProductDetailPage() {
   const status = getStockStatus();
 
   return (
-    <div className="min-h-screen bg-gray-50">
+    <div className="min-h-screen bg-gray-50 dark:bg-gray-900">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
         {/* Breadcrumb */}
-        <nav className="mb-8 flex items-center space-x-2 text-sm text-gray-600">
-          <Link href="/" className="hover:text-gray-900">
+        <nav className="mb-8 flex items-center space-x-2 text-sm text-gray-600 dark:text-gray-400">
+          <Link href="/" className="hover:text-gray-900 dark:hover:text-white">
             Home
           </Link>
           <span>/</span>
-          <Link href="/products" className="hover:text-gray-900">
+          <Link href="/products" className="hover:text-gray-900 dark:hover:text-white">
             Products
           </Link>
           {product.category1Id && (
@@ -105,7 +105,7 @@ export default function ProductDetailPage() {
           )}
         </nav>
 
-        <div className="bg-white rounded-lg shadow-lg overflow-hidden">
+        <div className="bg-white dark:bg-gray-800 rounded-lg shadow-lg overflow-hidden">
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 p-8">
             {/* Image Carousel */}
             <div>
@@ -114,10 +114,10 @@ export default function ProductDetailPage() {
 
             {/* Product Details */}
             <div>
-              <h1 className="text-3xl font-bold text-gray-900 mb-4">{product.name}</h1>
+              <h1 className="text-3xl font-bold text-gray-900 dark:text-white mb-4">{product.name}</h1>
 
               <div className="flex items-center gap-4 mb-6">
-                <p className="text-4xl font-bold text-blue-600">
+                <p className="text-4xl font-bold text-blue-600 dark:text-blue-400">
                   ${product.price.toFixed(2)}
                 </p>
                 <span className={`px-3 py-1 rounded-full text-sm font-medium ${status.color}`}>
@@ -126,7 +126,7 @@ export default function ProductDetailPage() {
               </div>
 
               {product.stock > 0 && (
-                <p className="text-gray-700 mb-6">
+                <p className="text-gray-700 dark:text-gray-300 mb-6">
                   <span className="font-semibold">Availability:</span> {product.stock} units in stock
                 </p>
               )}
@@ -134,19 +134,19 @@ export default function ProductDetailPage() {
               {/* Category Path */}
               {(product.category1Id || product.category2Id || product.category3Id) && (
                 <div className="mb-6">
-                  <p className="text-sm text-gray-600 mb-2">
+                  <p className="text-sm text-gray-600 dark:text-gray-400 mb-2">
                     <span className="font-semibold">Category:</span>
                   </p>
                   <div className="flex items-center flex-wrap gap-2 text-sm">
                     {product.category1Id && (
-                      <span className="bg-gray-100 px-3 py-1 rounded-full">
+                      <span className="bg-gray-100 dark:bg-gray-700 text-gray-900 dark:text-white px-3 py-1 rounded-full">
                         {product.category1Id.name}
                       </span>
                     )}
                     {product.category2Id && (
                       <>
                         <span className="text-gray-400">→</span>
-                        <span className="bg-gray-100 px-3 py-1 rounded-full">
+                        <span className="bg-gray-100 dark:bg-gray-700 text-gray-900 dark:text-white px-3 py-1 rounded-full">
                           {product.category2Id.name}
                         </span>
                       </>
@@ -154,7 +154,7 @@ export default function ProductDetailPage() {
                     {product.category3Id && (
                       <>
                         <span className="text-gray-400">→</span>
-                        <span className="bg-gray-100 px-3 py-1 rounded-full">
+                        <span className="bg-gray-100 dark:bg-gray-700 text-gray-900 dark:text-white px-3 py-1 rounded-full">
                           {product.category3Id.name}
                         </span>
                       </>
@@ -164,9 +164,9 @@ export default function ProductDetailPage() {
               )}
 
               {/* Description */}
-              <div className="border-t border-gray-200 pt-6">
-                <h2 className="text-xl font-semibold text-gray-900 mb-3">Description</h2>
-                <p className="text-gray-700 whitespace-pre-wrap leading-relaxed">
+              <div className="border-t border-gray-200 dark:border-gray-700 pt-6">
+                <h2 className="text-xl font-semibold text-gray-900 dark:text-white mb-3">Description</h2>
+                <p className="text-gray-700 dark:text-gray-300 whitespace-pre-wrap leading-relaxed">
                   {product.description}
                 </p>
               </div>
@@ -175,7 +175,7 @@ export default function ProductDetailPage() {
               <div className="mt-8 flex gap-4">
                 <Link
                   href="/products"
-                  className="px-6 py-3 bg-gray-200 text-gray-800 rounded-lg hover:bg-gray-300 transition-colors"
+                  className="px-6 py-3 bg-gray-200 dark:bg-gray-700 text-gray-800 dark:text-white rounded-lg hover:bg-gray-300 dark:hover:bg-gray-600 transition-colors"
                 >
                   Back to Products
                 </Link>

@@ -43,69 +43,69 @@ export default function AdminDashboardPage() {
 
   return (
     <ProtectedRoute>
-      <div className="min-h-screen bg-gray-50">
+      <div className="min-h-screen bg-gray-50 dark:bg-gray-900">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
           <div className="mb-8">
-            <h1 className="text-3xl font-bold text-gray-900">Admin Dashboard</h1>
-            <p className="mt-2 text-gray-600">Manage your inventory</p>
+            <h1 className="text-3xl font-bold text-gray-900 dark:text-white">Admin Dashboard</h1>
+            <p className="mt-2 text-gray-600 dark:text-gray-400">Manage your inventory</p>
           </div>
 
           {/* Navigation Cards */}
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
             <Link
               href="/admin/products"
-              className="bg-white p-6 rounded-lg shadow hover:shadow-lg transition-shadow"
+              className="bg-white dark:bg-gray-800 p-6 rounded-lg shadow hover:shadow-lg transition-shadow"
             >
-              <h3 className="text-lg font-semibold text-gray-900 mb-2">Products</h3>
-              <p className="text-gray-600">Manage inventory</p>
+              <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-2">Products</h3>
+              <p className="text-gray-600 dark:text-gray-400">Manage inventory</p>
             </Link>
 
             <Link
               href="/admin/categories"
-              className="bg-white p-6 rounded-lg shadow hover:shadow-lg transition-shadow"
+              className="bg-white dark:bg-gray-800 p-6 rounded-lg shadow hover:shadow-lg transition-shadow"
             >
-              <h3 className="text-lg font-semibold text-gray-900 mb-2">Categories</h3>
-              <p className="text-gray-600">Organize products</p>
+              <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-2">Categories</h3>
+              <p className="text-gray-600 dark:text-gray-400">Organize products</p>
             </Link>
 
             <Link
               href="/admin/settings"
-              className="bg-white p-6 rounded-lg shadow hover:shadow-lg transition-shadow"
+              className="bg-white dark:bg-gray-800 p-6 rounded-lg shadow hover:shadow-lg transition-shadow"
             >
-              <h3 className="text-lg font-semibold text-gray-900 mb-2">Settings</h3>
-              <p className="text-gray-600">Hero banner</p>
+              <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-2">Settings</h3>
+              <p className="text-gray-600 dark:text-gray-400">Hero banner</p>
             </Link>
 
             <Link
               href="/"
-              className="bg-white p-6 rounded-lg shadow hover:shadow-lg transition-shadow"
+              className="bg-white dark:bg-gray-800 p-6 rounded-lg shadow hover:shadow-lg transition-shadow"
             >
-              <h3 className="text-lg font-semibold text-gray-900 mb-2">View Site</h3>
-              <p className="text-gray-600">Public view</p>
+              <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-2">View Site</h3>
+              <p className="text-gray-600 dark:text-gray-400">Public view</p>
             </Link>
           </div>
 
           {loading ? (
             <div className="text-center py-12">
-              <p className="text-gray-500">Loading dashboard...</p>
+              <p className="text-gray-500 dark:text-gray-400">Loading dashboard...</p>
             </div>
           ) : data ? (
             <>
               {/* Stats Cards */}
               <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
-                <div className="bg-white p-6 rounded-lg shadow">
-                  <h3 className="text-sm font-medium text-gray-600 mb-2">Total Products</h3>
-                  <p className="text-3xl font-bold text-blue-600">{data.totalProducts}</p>
+                <div className="bg-white dark:bg-gray-800 p-6 rounded-lg shadow">
+                  <h3 className="text-sm font-medium text-gray-600 dark:text-gray-400 mb-2">Total Products</h3>
+                  <p className="text-3xl font-bold text-blue-600 dark:text-blue-400">{data.totalProducts}</p>
                 </div>
 
-                <div className="bg-white p-6 rounded-lg shadow">
-                  <h3 className="text-sm font-medium text-gray-600 mb-2">Low Stock Items</h3>
-                  <p className="text-3xl font-bold text-yellow-600">{data.lowStockCount}</p>
+                <div className="bg-white dark:bg-gray-800 p-6 rounded-lg shadow">
+                  <h3 className="text-sm font-medium text-gray-600 dark:text-gray-400 mb-2">Low Stock Items</h3>
+                  <p className="text-3xl font-bold text-yellow-600 dark:text-yellow-400">{data.lowStockCount}</p>
                 </div>
 
-                <div className="bg-white p-6 rounded-lg shadow">
-                  <h3 className="text-sm font-medium text-gray-600 mb-2">Out of Stock</h3>
-                  <p className="text-3xl font-bold text-red-600">{data.outOfStockCount}</p>
+                <div className="bg-white dark:bg-gray-800 p-6 rounded-lg shadow">
+                  <h3 className="text-sm font-medium text-gray-600 dark:text-gray-400 mb-2">Out of Stock</h3>
+                  <p className="text-3xl font-bold text-red-600 dark:text-red-400">{data.outOfStockCount}</p>
                 </div>
               </div>
 
@@ -157,56 +157,56 @@ export default function AdminDashboardPage() {
               )}
 
               {/* Recent Stock Changes */}
-              <div className="bg-white rounded-lg shadow overflow-hidden">
-                <div className="px-6 py-4 border-b border-gray-200">
-                  <h2 className="text-lg font-semibold text-gray-900">Recent Stock Changes</h2>
+              <div className="bg-white dark:bg-gray-800 rounded-lg shadow overflow-hidden">
+                <div className="px-6 py-4 border-b border-gray-200 dark:border-gray-700">
+                  <h2 className="text-lg font-semibold text-gray-900 dark:text-white">Recent Stock Changes</h2>
                 </div>
                 <div className="overflow-x-auto">
                   {data.recentStockChanges.length === 0 ? (
-                    <p className="px-6 py-4 text-gray-500">No stock changes yet</p>
+                    <p className="px-6 py-4 text-gray-500 dark:text-gray-400">No stock changes yet</p>
                   ) : (
-                    <table className="min-w-full divide-y divide-gray-200">
-                      <thead className="bg-gray-50">
+                    <table className="min-w-full divide-y divide-gray-200 dark:divide-gray-700">
+                      <thead className="bg-gray-50 dark:bg-gray-700">
                         <tr>
-                          <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                          <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">
                             Product
                           </th>
-                          <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                          <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">
                             Change
                           </th>
-                          <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                          <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">
                             Reason
                           </th>
-                          <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                          <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">
                             Date
                           </th>
                         </tr>
                       </thead>
-                      <tbody className="bg-white divide-y divide-gray-200">
+                      <tbody className="bg-white dark:bg-gray-800 divide-y divide-gray-200 dark:divide-gray-700">
                         {data.recentStockChanges.map((change) => (
                           <tr key={change._id}>
-                            <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
+                            <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900 dark:text-white">
                               {change.productId?.name || 'Unknown'}
                             </td>
                             <td className="px-6 py-4 whitespace-nowrap text-sm">
                               <span
                                 className={`px-2 py-1 rounded ${
                                   change.change > 0
-                                    ? 'bg-green-100 text-green-800'
-                                    : 'bg-red-100 text-red-800'
+                                    ? 'bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-200'
+                                    : 'bg-red-100 text-red-800 dark:bg-red-900 dark:text-red-200'
                                 }`}
                               >
                                 {change.change > 0 ? '+' : ''}
                                 {change.change}
                               </span>
-                              <span className="ml-2 text-gray-600">
+                              <span className="ml-2 text-gray-600 dark:text-gray-400">
                                 ({change.previousStock} → {change.newStock})
                               </span>
                             </td>
-                            <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-600">
+                            <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-600 dark:text-gray-400">
                               {change.reason || 'Manual Adjustment'}
                             </td>
-                            <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-600">
+                            <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-600 dark:text-gray-400">
                               {new Date(change.createdAt).toLocaleDateString()}
                             </td>
                           </tr>
@@ -219,7 +219,7 @@ export default function AdminDashboardPage() {
             </>
           ) : (
             <div className="text-center py-12">
-              <p className="text-gray-500">No data available</p>
+              <p className="text-gray-500 dark:text-gray-400">No data available</p>
             </div>
           )}
         </div>

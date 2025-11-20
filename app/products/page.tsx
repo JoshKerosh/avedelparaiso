@@ -133,19 +133,19 @@ export default function ProductsPage() {
   };
 
   return (
-    <div className="min-h-screen bg-gray-50">
+    <div className="min-h-screen bg-gray-50 dark:bg-gray-900">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-        <h1 className="text-3xl font-bold text-gray-900 mb-8">All Products</h1>
+        <h1 className="text-3xl font-bold text-gray-900 dark:text-white mb-8">All Products</h1>
 
         <div className="flex flex-col lg:flex-row gap-8">
           {/* Filters Sidebar */}
           <div className="lg:w-64 flex-shrink-0">
-            <div className="bg-white rounded-lg shadow p-6 sticky top-4">
+            <div className="bg-white dark:bg-gray-800 rounded-lg shadow p-6 sticky top-4">
               <div className="flex justify-between items-center mb-4">
-                <h2 className="text-lg font-semibold text-gray-900">Filters</h2>
+                <h2 className="text-lg font-semibold text-gray-900 dark:text-white">Filters</h2>
                 <button
                   onClick={clearFilters}
-                  className="text-sm text-blue-600 hover:text-blue-700"
+                  className="text-sm text-blue-600 dark:text-blue-400 hover:text-blue-700 dark:hover:text-blue-300"
                 >
                   Clear
                 </button>
@@ -153,7 +153,7 @@ export default function ProductsPage() {
 
               {/* Search */}
               <div className="mb-6">
-                <label className="block text-sm font-medium text-gray-700 mb-2">
+                <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
                   Search
                 </label>
                 <input
@@ -161,19 +161,19 @@ export default function ProductsPage() {
                   value={search}
                   onChange={(e) => setSearch(e.target.value)}
                   placeholder="Search products..."
-                  className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                  className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent bg-white dark:bg-gray-700 text-gray-900 dark:text-white placeholder-gray-500 dark:placeholder-gray-400"
                 />
               </div>
 
               {/* Category Level 1 */}
               <div className="mb-6">
-                <label className="block text-sm font-medium text-gray-700 mb-2">
+                <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
                   Category
                 </label>
                 <select
                   value={selectedCat1}
                   onChange={(e) => setSelectedCat1(e.target.value)}
-                  className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                  className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent bg-white dark:bg-gray-700 text-gray-900 dark:text-white"
                 >
                   <option value="">All Categories</option>
                   {categories1.map((cat) => (
@@ -187,13 +187,13 @@ export default function ProductsPage() {
               {/* Category Level 2 */}
               {selectedCat1 && categories2.length > 0 && (
                 <div className="mb-6">
-                  <label className="block text-sm font-medium text-gray-700 mb-2">
+                  <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
                     Subcategory
                   </label>
                   <select
                     value={selectedCat2}
                     onChange={(e) => setSelectedCat2(e.target.value)}
-                    className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                    className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent bg-white dark:bg-gray-700 text-gray-900 dark:text-white"
                   >
                     <option value="">All Subcategories</option>
                     {categories2.map((cat) => (
@@ -208,13 +208,13 @@ export default function ProductsPage() {
               {/* Category Level 3 */}
               {selectedCat2 && categories3.length > 0 && (
                 <div className="mb-6">
-                  <label className="block text-sm font-medium text-gray-700 mb-2">
+                  <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
                     Sub-subcategory
                   </label>
                   <select
                     value={selectedCat3}
                     onChange={(e) => setSelectedCat3(e.target.value)}
-                    className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                    className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent bg-white dark:bg-gray-700 text-gray-900 dark:text-white"
                   >
                     <option value="">All</option>
                     {categories3.map((cat) => (
@@ -228,13 +228,13 @@ export default function ProductsPage() {
 
               {/* Sort */}
               <div className="mb-6">
-                <label className="block text-sm font-medium text-gray-700 mb-2">
+                <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
                   Sort By
                 </label>
                 <select
                   value={sort}
                   onChange={(e) => setSort(e.target.value)}
-                  className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                  className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent bg-white dark:bg-gray-700 text-gray-900 dark:text-white"
                 >
                   <option value="newest">Newest</option>
                   <option value="price-asc">Price: Low to High</option>
@@ -249,15 +249,15 @@ export default function ProductsPage() {
           <div className="flex-1">
             {loading ? (
               <div className="text-center py-12">
-                <p className="text-gray-500">Loading products...</p>
+                <p className="text-gray-500 dark:text-gray-400">Loading products...</p>
               </div>
             ) : products.length === 0 ? (
               <div className="text-center py-12">
-                <p className="text-gray-500">No products found.</p>
+                <p className="text-gray-500 dark:text-gray-400">No products found.</p>
               </div>
             ) : (
               <>
-                <p className="text-gray-600 mb-4">{products.length} products found</p>
+                <p className="text-gray-600 dark:text-gray-400 mb-4">{products.length} products found</p>
                 <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
                   {products.map((product) => {
                     const status = getStockStatus(product);
@@ -265,9 +265,9 @@ export default function ProductsPage() {
                       <Link
                         key={product._id}
                         href={`/products/${product._id}`}
-                        className="bg-white rounded-lg shadow hover:shadow-lg transition-shadow overflow-hidden group"
+                        className="bg-white dark:bg-gray-800 rounded-lg shadow hover:shadow-lg transition-shadow overflow-hidden group"
                       >
-                        <div className="relative h-48 bg-gray-100">
+                        <div className="relative h-48 bg-gray-100 dark:bg-gray-700">
                           <Image
                             src={getMainImage(product)}
                             alt={product.name}
@@ -276,11 +276,11 @@ export default function ProductsPage() {
                           />
                         </div>
                         <div className="p-4">
-                          <h3 className="font-semibold text-gray-900 line-clamp-2 mb-2">
+                          <h3 className="font-semibold text-gray-900 dark:text-white line-clamp-2 mb-2">
                             {product.name}
                           </h3>
                           <div className="flex justify-between items-center mb-2">
-                            <p className="text-lg font-bold text-blue-600">
+                            <p className="text-lg font-bold text-blue-600 dark:text-blue-400">
                               ${product.price.toFixed(2)}
                             </p>
                             <span className={`text-xs px-2 py-1 rounded ${status.color}`}>
@@ -288,7 +288,7 @@ export default function ProductsPage() {
                             </span>
                           </div>
                           {product.stock > 0 && (
-                            <p className="text-sm text-gray-600">{product.stock} in stock</p>
+                            <p className="text-sm text-gray-600 dark:text-gray-400">{product.stock} in stock</p>
                           )}
                         </div>
                       </Link>
