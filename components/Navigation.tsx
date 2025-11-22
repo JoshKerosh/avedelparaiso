@@ -2,18 +2,29 @@
 
 import Link from 'next/link';
 import ThemeToggle from './ThemeToggle';
+import { useSession } from 'next-auth/react';
+import { useIsAdmin } from '@/hooks/useIsAdmin';
 import { useState } from 'react';
 
 export default function Navigation() {
   const [isOpen, setIsOpen] = useState(false);
+  const { status } = useSession();
+  const isAdmin = useIsAdmin();
 
   return (
     <nav className="bg-white dark:bg-gray-800 shadow-sm border-b border-gray-200 dark:border-gray-700 sticky top-0 z-50">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex justify-between h-16 items-center">
-          <Link href="/" className="text-xl sm:text-2xl font-bold text-gray-900 dark:text-white hover:text-gray-700 dark:hover:text-gray-300">
-            Ave del Paraíso
-          </Link>
+          <div className="flex flex-col items-start">
+            <Link href="/" className="text-xl sm:text-2xl font-bold text-gray-900 dark:text-white hover:text-gray-700 dark:hover:text-gray-300">
+              Ave del Paraíso
+            </Link>
+            {status === 'authenticated' && (
+              <span className="mt-1 ml-0.5 px-2 py-0.5 text-xs rounded bg-blue-600 text-white font-semibold shadow select-none border border-blue-800">
+                Admin
+              </span>
+            )}
+          </div>
           
           {/* Desktop Menu */}
           <div className="hidden md:flex items-center space-x-8">

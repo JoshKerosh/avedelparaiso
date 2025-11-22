@@ -7,7 +7,7 @@ import cloudinary from '@/lib/cloudinary';
 
 export async function GET(
   request: NextRequest,
-  { params }: { params: Promise<{ id: string }> }
+  { params }: { params: { id: string } }
 ) {
   try {
     const session = await getServerSession(authOptions);
@@ -16,7 +16,7 @@ export async function GET(
     }
 
     await connectDB();
-    const { id } = await params;
+    const { id } = params;
 
     const product = await Product.findById(id)
       .populate('category1Id category2Id category3Id')
@@ -35,7 +35,7 @@ export async function GET(
 
 export async function PUT(
   request: NextRequest,
-  { params }: { params: Promise<{ id: string }> }
+  { params }: { params: { id: string } }
 ) {
   try {
     const session = await getServerSession(authOptions);

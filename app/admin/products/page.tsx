@@ -279,12 +279,12 @@ export default function AdminProductsPage() {
 
   return (
     <ProtectedRoute>
-      <div className="min-h-screen bg-gray-50">
+      <div className="min-h-screen bg-gray-50 dark:bg-gray-900">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
           <div className="mb-8 flex justify-between items-center">
             <div>
-              <h1 className="text-3xl font-bold text-gray-900">Products</h1>
-              <p className="mt-2 text-gray-600">Manage your inventory</p>
+              <h1 className="text-3xl font-bold text-gray-900 dark:text-gray-100">Products</h1>
+              <p className="mt-2 text-gray-600 dark:text-gray-300">Manage your inventory</p>
             </div>
             <button
               onClick={openAddModal}
@@ -319,7 +319,7 @@ export default function AdminProductsPage() {
                     {products.map((product) => {
                       const mainImage = product.images?.find((img) => img.isMain)?.url || product.images?.[0]?.url;
                       return (
-                        <tr key={product._id}>
+                        <tr key={product._id} onDoubleClick={() => openEditModal(product)} className="cursor-pointer">
                           <td className="px-6 py-4 whitespace-nowrap">
                             {mainImage && (
                               <div className="relative h-12 w-12">
@@ -337,14 +337,14 @@ export default function AdminProductsPage() {
                           <td className="px-6 py-4 whitespace-nowrap">
                             <div className="flex items-center gap-2">
                               <button
-                                onClick={() => adjustStock(product._id, -1)}
+                                onClick={e => { e.stopPropagation(); adjustStock(product._id, -1); }}
                                 className="px-2 py-1 bg-red-100 text-red-700 rounded hover:bg-red-200"
                               >
                                 −
                               </button>
                               <span className="text-sm font-medium min-w-[40px] text-center">{product.stock}</span>
                               <button
-                                onClick={() => adjustStock(product._id, 1)}
+                                onClick={e => { e.stopPropagation(); adjustStock(product._id, 1); }}
                                 className="px-2 py-1 bg-green-100 text-green-700 rounded hover:bg-green-200"
                               >
                                 +
@@ -354,19 +354,19 @@ export default function AdminProductsPage() {
                           <td className="px-6 py-4 whitespace-nowrap text-sm">
                             <div className="flex gap-2">
                               <button
-                                onClick={() => viewHistory(product)}
+                                onClick={e => { e.stopPropagation(); viewHistory(product); }}
                                 className="text-blue-600 hover:text-blue-900"
                               >
                                 History
                               </button>
                               <button
-                                onClick={() => openEditModal(product)}
+                                onClick={e => { e.stopPropagation(); openEditModal(product); }}
                                 className="text-gray-600 hover:text-gray-900"
                               >
                                 Edit
                               </button>
                               <button
-                                onClick={() => handleDelete(product)}
+                                onClick={e => { e.stopPropagation(); handleDelete(product); }}
                                 className="text-red-600 hover:text-red-900"
                               >
                                 Delete
@@ -387,14 +387,14 @@ export default function AdminProductsPage() {
       {/* Product Modal */}
       {showModal && (
         <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 overflow-y-auto">
-          <div className="bg-white rounded-lg p-6 w-full max-w-2xl m-4 max-h-[90vh] overflow-y-auto">
+          <div className="bg-white dark:bg-gray-900 rounded-lg p-6 w-full max-w-2xl m-4 max-h-[90vh] overflow-y-auto">
             <h2 className="text-xl font-bold text-gray-900 mb-4">
               {modalMode === 'add' ? 'Add Product' : 'Edit Product'}
             </h2>
 
             <form onSubmit={handleSubmit} className="space-y-4">
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-2">Name *</label>
+                <label className="block text-sm font-medium text-gray-700 dark:text-gray-200 mb-2">Name *</label>
                 <input
                   type="text"
                   value={formData.name}
@@ -405,7 +405,7 @@ export default function AdminProductsPage() {
               </div>
 
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-2">Description *</label>
+                <label className="block text-sm font-medium text-gray-700 dark:text-gray-200 mb-2">Description *</label>
                 <textarea
                   value={formData.description}
                   onChange={(e) => setFormData({ ...formData, description: e.target.value })}
@@ -417,7 +417,7 @@ export default function AdminProductsPage() {
 
               <div className="grid grid-cols-3 gap-4">
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-2">Price *</label>
+                  <label className="block text-sm font-medium text-gray-700 dark:text-gray-200 mb-2">Price *</label>
                   <input
                     type="number"
                     step="0.01"
@@ -428,7 +428,7 @@ export default function AdminProductsPage() {
                   />
                 </div>
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-2">Stock *</label>
+                  <label className="block text-sm font-medium text-gray-700 dark:text-gray-200 mb-2">Stock *</label>
                   <input
                     type="number"
                     value={formData.stock}
@@ -438,7 +438,7 @@ export default function AdminProductsPage() {
                   />
                 </div>
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-2">Low Stock Alert</label>
+                  <label className="block text-sm font-medium text-gray-700 dark:text-gray-200 mb-2">Low Stock Alert</label>
                   <input
                     type="number"
                     value={formData.lowStockThreshold}
@@ -450,7 +450,7 @@ export default function AdminProductsPage() {
 
               {/* Categories */}
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-2">Category</label>
+                <label className="block text-sm font-medium text-gray-700 dark:text-gray-200 mb-2">Category</label>
                 <select
                   value={formData.category1Id}
                   onChange={(e) => setFormData({ ...formData, category1Id: e.target.value })}
@@ -491,7 +491,7 @@ export default function AdminProductsPage() {
 
               {/* Images */}
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-2">Images *</label>
+                <label className="block text-sm font-medium text-gray-700 dark:text-gray-200 mb-2">Images *</label>
                 <CloudinaryUploadWidget
                   onUploadSuccess={handleImageUpload}
                   folder="inventory/products"

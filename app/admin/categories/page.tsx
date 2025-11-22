@@ -3,6 +3,7 @@
 import { useEffect, useState } from 'react';
 import ProtectedRoute from '@/components/ProtectedRoute';
 import toast from 'react-hot-toast';
+import { FaTrash, FaPen } from 'react-icons/fa';
 
 interface Category {
   _id: string;
@@ -195,6 +196,7 @@ export default function AdminCategoriesPage() {
 
   const handleDelete = async (category: Category) => {
     if (!confirm(`Are you sure you want to delete "${category.name}"?`)) return;
+    if (!window.confirm(`¿Estás seguro que quieres eliminar la categoría "${category.name}"? Esta acción no se puede deshacer.`)) return;
 
     try {
       const response = await fetch(`/api/admin/categories/${category._id}`, {
@@ -225,18 +227,18 @@ export default function AdminCategoriesPage() {
 
   return (
     <ProtectedRoute>
-      <div className="min-h-screen bg-gray-50">
+      <div className="min-h-screen bg-gray-50 dark:bg-gray-900">
         <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
           <div className="mb-8 flex justify-between items-center">
             <div>
-              <h1 className="text-3xl font-bold text-gray-900">Categories</h1>
-              <p className="mt-2 text-gray-600">Organize your products with a 3-level hierarchy</p>
+              <h1 className="text-3xl font-bold text-gray-900 dark:text-gray-100">Categories</h1>
+              <p className="mt-2 text-gray-600 dark:text-gray-300">Organize your products with a 3-level hierarchy</p>
             </div>
             <button
               onClick={() => openAddModal(1)}
               className="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors"
             >
-              Add Level 1 Category
+              Add Category
             </button>
           </div>
 
@@ -274,21 +276,24 @@ export default function AdminCategoriesPage() {
                           <div className="flex items-center gap-2">
                             <button
                               onClick={() => openAddModal(2, cat1._id)}
-                              className="px-3 py-1 text-sm bg-green-600 dark:bg-green-500 text-white rounded hover:bg-green-700 dark:hover:bg-green-600"
+                              className="flex items-center justify-center w-7 h-7 text-base bg-green-600 dark:bg-green-500 text-white rounded-full hover:bg-green-700 dark:hover:bg-green-600"
+                              title="Add Subcategory"
                             >
-                              Add Subcategory
+                              +
                             </button>
                             <button
                               onClick={() => openEditModal(cat1)}
-                              className="px-3 py-1 text-sm bg-gray-600 dark:bg-gray-500 text-white rounded hover:bg-gray-700 dark:hover:bg-gray-600"
+                              className="flex items-center justify-center w-7 h-7 text-base bg-gray-600 dark:bg-gray-500 text-white rounded-full hover:bg-gray-700 dark:hover:bg-gray-600 ml-1"
+                              title="Edit"
                             >
-                              Edit
+                              <FaPen size={12} />
                             </button>
                             <button
                               onClick={() => handleDelete(cat1)}
-                              className="px-3 py-1 text-sm bg-red-600 dark:bg-red-500 text-white rounded hover:bg-red-700 dark:hover:bg-red-600"
+                              className="flex items-center justify-center w-7 h-7 text-base bg-red-600 dark:bg-red-500 text-white rounded-full hover:bg-red-700 dark:hover:bg-red-600 ml-1"
+                              title="Delete"
                             >
-                              Delete
+                              <FaTrash size={12} />
                             </button>
                           </div>
                         </div>
@@ -318,21 +323,24 @@ export default function AdminCategoriesPage() {
                                   <div className="flex items-center gap-2">
                                     <button
                                       onClick={() => openAddModal(3, cat2._id)}
-                                      className="px-3 py-1 text-sm bg-green-600 text-white rounded hover:bg-green-700"
+                                      className="flex items-center justify-center w-7 h-7 text-base bg-green-600 text-white rounded-full hover:bg-green-700"
+                                      title="Add Subcategory"
                                     >
-                                      Add Sub-sub
+                                      +
                                     </button>
                                     <button
                                       onClick={() => openEditModal(cat2)}
-                                      className="px-3 py-1 text-sm bg-gray-600 text-white rounded hover:bg-gray-700"
+                                      className="flex items-center justify-center w-7 h-7 text-base bg-gray-600 text-white rounded-full hover:bg-gray-700 ml-1"
+                                      title="Edit"
                                     >
-                                      Edit
+                                      <FaPen size={12} />
                                     </button>
                                     <button
                                       onClick={() => handleDelete(cat2)}
-                                      className="px-3 py-1 text-sm bg-red-600 text-white rounded hover:bg-red-700"
+                                      className="flex items-center justify-center w-7 h-7 text-base bg-red-600 text-white rounded-full hover:bg-red-700 ml-1"
+                                      title="Delete"
                                     >
-                                      Delete
+                                      <FaTrash size={12} />
                                     </button>
                                   </div>
                                 </div>
@@ -353,15 +361,17 @@ export default function AdminCategoriesPage() {
                                         <div className="flex items-center gap-2">
                                           <button
                                             onClick={() => openEditModal(cat3)}
-                                            className="px-3 py-1 text-sm bg-gray-600 text-white rounded hover:bg-gray-700"
+                                            className="flex items-center justify-center w-7 h-7 text-base bg-gray-600 text-white rounded-full hover:bg-gray-700 ml-1"
+                                            title="Edit"
                                           >
-                                            Edit
+                                            <FaPen size={12} />
                                           </button>
                                           <button
                                             onClick={() => handleDelete(cat3)}
-                                            className="px-3 py-1 text-sm bg-red-600 text-white rounded hover:bg-red-700"
+                                            className="flex items-center justify-center w-7 h-7 text-base bg-red-600 text-white rounded-full hover:bg-red-700 ml-1"
+                                            title="Delete"
                                           >
-                                            Delete
+                                            <FaTrash size={12} />
                                           </button>
                                         </div>
                                       </div>
@@ -393,7 +403,7 @@ export default function AdminCategoriesPage() {
         <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
           <div className="bg-white rounded-lg p-6 w-full max-w-md">
             <h2 className="text-xl font-bold text-gray-900 mb-4">
-              {modalMode === 'add' ? `Add Level ${selectedLevel} Category` : 'Edit Category'}
+              {modalMode === 'add' ? 'Add Category' : 'Edit Category'}
             </h2>
 
             <form onSubmit={handleSubmit} className="space-y-4">
