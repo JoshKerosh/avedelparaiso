@@ -1,23 +1,32 @@
-'use client';
 
-import { useEffect, useState } from 'react';
-import Image from 'next/image';
-import ProtectedRoute from '@/components/ProtectedRoute';
-import CloudinaryUploadWidget from '@/components/CloudinaryUploadWidget';
-import toast from 'react-hot-toast';
+  'use client';
+  import { useState, useEffect } from 'react';
+  import Image from 'next/image';
+  import ProtectedRoute from '@/components/ProtectedRoute';
+  import CloudinaryUploadWidget from '@/components/CloudinaryUploadWidget';
+  import toast from 'react-hot-toast';
 
-interface Product {
-  _id: string;
-  name: string;
-  description: string;
-  price: number;
-  stock: number;
-  lowStockThreshold: number;
-  images: { url: string; publicId: string; isMain: boolean }[];
-  category1Id?: string;
-  category2Id?: string;
-  category3Id?: string;
-}
+  interface Product {
+    _id: string;
+    name: string;
+    description: string;
+    price: number;
+    stock: number;
+    lowStockThreshold: number;
+    images: { url: string; publicId: string; isMain: boolean }[];
+    category1Id?: string;
+    category2Id?: string;
+    category3Id?: string;
+  }
+
+  interface Category {
+    _id: string;
+    name: string;
+    level: number;
+  }
+
+// ...existing code...
+
 
 interface Category {
   _id: string;
@@ -26,6 +35,46 @@ interface Category {
 }
 
 export default function AdminProductsPage() {
+    // Estado para modal de reducción de stock
+    const [showReduceModal, setShowReduceModal] = useState(false);
+    const [reduceProduct, setReduceProduct] = useState<Product | null>(null);
+    const [reduceAmount, setReduceAmount] = useState(1);
+    const [reduceReason, setReduceReason] = useState<'SALE' | 'DAMAGED' | 'ADJUSTMENT' | 'OTHER'>('SALE');
+    const [reduceNotes, setReduceNotes] = useState('');
+    const [showConfirmReduce, setShowConfirmReduce] = useState(false);
+
+    // Abre el modal de reducción
+    const openReduceModal = (product: Product) => {
+      setReduceProduct(product);
+      setReduceAmount(1);
+      setReduceReason('SALE');
+      setReduceNotes('');
+      setShowReduceModal(true);
+    };
+
+    // Ejecuta la reducción de stock
+    const handleReduceStock = async () => {
+      if (!reduceProduct) return;
+      setShowConfirmReduce(false);
+      setShowReduceModal(false);
+      try {
+        const response = await fetch(`/api/admin/products/${reduceProduct._id}/stock`, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ change: -reduceAmount, reason: reduceReason, notes: reduceNotes }),
+        });
+        if (response.ok) {
+          toast.success('Stock reduced!');
+          fetchProducts();
+        } else {
+          const data = await response.json();
+          toast.error(data.error || 'Failed to reduce stock');
+        }
+      } catch (error) {
+        console.error('Error reducing stock:', error);
+        toast.error('An error occurred');
+      }
+    };
   const [products, setProducts] = useState<Product[]>([]);
   const [categories1, setCategories1] = useState<Category[]>([]);
   const [categories2, setCategories2] = useState<Category[]>([]);
@@ -332,16 +381,63 @@ export default function AdminProductsPage() {
                             <div className="text-sm text-gray-500 dark:text-gray-400 line-clamp-1">{product.description}</div>
                           </td>
                           <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900 dark:text-white">
-                            ${product.price.toFixed(2)}
+                            ₡{product.price.toLocaleString('es-CR', { maximumFractionDigits: 0 })}
                           </td>
                           <td className="px-6 py-4 whitespace-nowrap">
                             <div className="flex items-center gap-2">
                               <button
-                                onClick={e => { e.stopPropagation(); adjustStock(product._id, -1); }}
+                                onClick={e => { e.stopPropagation(); openReduceModal(product); }}
                                 className="px-2 py-1 bg-red-100 text-red-700 rounded hover:bg-red-200"
                               >
                                 −
                               </button>
+                                    {/* Modal para reducir stock */}
+                                    {showReduceModal && reduceProduct && (
+                                      <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+                                        <div className="bg-white dark:bg-gray-900 rounded-lg p-6 w-full max-w-md m-4 max-h-[90vh] overflow-y-auto">
+                                          <h2 className="text-lg font-bold text-gray-900 dark:text-gray-100 mb-4">Reduce Stock: {reduceProduct.name}</h2>
+                                          <form onSubmit={e => { e.preventDefault(); setShowConfirmReduce(true); }} className="space-y-4">
+                                            <div>
+                                              <label className="block text-sm font-medium text-gray-700 dark:text-gray-200 mb-2">Amount to reduce *</label>
+                                              <input type="number" min={1} max={reduceProduct.stock} value={reduceAmount} onChange={e => setReduceAmount(Number(e.target.value))} className="w-full px-3 py-2 border border-gray-300 dark:border-gray-700 rounded-lg bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100" required />
+                                            </div>
+                                            <div>
+                                              <label className="block text-sm font-medium text-gray-700 dark:text-gray-200 mb-2">Reason *</label>
+                                              <div className="flex gap-4">
+                                                {['SALE', 'DAMAGED', 'ADJUSTMENT', 'OTHER'].map(option => (
+                                                  <label key={option} className="flex items-center gap-1 text-sm text-gray-700 dark:text-gray-200">
+                                                    <input type="radio" name="reason" value={option} checked={reduceReason === option} onChange={() => setReduceReason(option as any)} className="accent-blue-600" />
+                                                    {option}
+                                                  </label>
+                                                ))}
+                                              </div>
+                                            </div>
+                                            <div>
+                                              <label className="block text-sm font-medium text-gray-700 dark:text-gray-200 mb-2">Observations</label>
+                                              <textarea value={reduceNotes} onChange={e => setReduceNotes(e.target.value)} rows={3} className="w-full px-3 py-2 border border-gray-300 dark:border-gray-700 rounded-lg bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100" placeholder="Add any notes..." />
+                                            </div>
+                                            <div className="flex justify-end gap-3 mt-6">
+                                              <button type="button" onClick={() => setShowReduceModal(false)} className="px-4 py-2 border border-gray-300 dark:border-gray-700 text-gray-700 dark:text-gray-100 rounded-lg hover:bg-gray-50 dark:hover:bg-gray-800">Cancel</button>
+                                              <button type="submit" className="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700">Accept</button>
+                                            </div>
+                                          </form>
+                                        </div>
+                                      </div>
+                                    )}
+
+                                    {/* Modal de confirmación */}
+                                    {showConfirmReduce && (
+                                      <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+                                        <div className="bg-white dark:bg-gray-900 rounded-lg p-6 w-full max-w-sm m-4">
+                                          <h3 className="text-lg font-bold text-gray-900 dark:text-gray-100 mb-4">Confirm Reduction</h3>
+                                          <p className="mb-6 text-gray-700 dark:text-gray-200">Are you sure you want to reduce <span className="font-bold">{reduceAmount}</span> units from <span className="font-bold">{reduceProduct?.name}</span>?</p>
+                                          <div className="flex justify-end gap-3">
+                                            <button onClick={() => setShowConfirmReduce(false)} className="px-4 py-2 border border-gray-300 dark:border-gray-700 text-gray-700 dark:text-gray-100 rounded-lg hover:bg-gray-50 dark:hover:bg-gray-800">Cancel</button>
+                                            <button onClick={handleReduceStock} className="px-4 py-2 bg-red-600 text-white rounded-lg hover:bg-red-700">Confirm</button>
+                                          </div>
+                                        </div>
+                                      </div>
+                                    )}
                               <span className="text-sm font-medium min-w-[40px] text-center">{product.stock}</span>
                               <button
                                 onClick={e => { e.stopPropagation(); adjustStock(product._id, 1); }}
@@ -386,8 +482,16 @@ export default function AdminProductsPage() {
 
       {/* Product Modal */}
       {showModal && (
-        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 overflow-y-auto">
-          <div className="bg-white dark:bg-gray-900 rounded-lg p-6 w-full max-w-2xl m-4 max-h-[90vh] overflow-y-auto">
+        <div
+          className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 overflow-y-auto"
+          tabIndex={-1}
+          onClick={closeModal}
+          onKeyDown={e => { if (e.key === 'Escape') closeModal(); }}
+        >
+          <div
+            className="bg-white dark:bg-gray-900 rounded-lg p-6 w-full max-w-2xl m-4 max-h-[90vh] overflow-y-auto"
+            onClick={e => e.stopPropagation()}
+          >
             <h2 className="text-xl font-bold text-gray-900 mb-4">
               {modalMode === 'add' ? 'Add Product' : 'Edit Product'}
             </h2>
@@ -550,9 +654,17 @@ export default function AdminProductsPage() {
 
       {/* History Modal */}
       {showHistoryModal && historyProduct && (
-        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
-          <div className="bg-white rounded-lg p-6 w-full max-w-3xl m-4 max-h-[80vh] overflow-y-auto">
-            <h2 className="text-xl font-bold text-gray-900 mb-4">
+        <div
+          className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50"
+          tabIndex={-1}
+          onClick={() => setShowHistoryModal(false)}
+          onKeyDown={e => { if (e.key === 'Escape') setShowHistoryModal(false); }}
+        >
+          <div
+            className="bg-white dark:bg-gray-900 rounded-lg p-6 w-full max-w-3xl m-4 max-h-[80vh] overflow-y-auto"
+            onClick={e => e.stopPropagation()}
+          >
+            <h2 className="text-xl font-bold text-gray-900 dark:text-gray-100 mb-4">
               Stock History: {historyProduct.name}
             </h2>
 
@@ -560,30 +672,32 @@ export default function AdminProductsPage() {
               <p className="text-gray-500">No stock changes yet</p>
             ) : (
               <table className="min-w-full divide-y divide-gray-200">
-                <thead className="bg-gray-50">
+                <thead className="bg-gray-50 dark:bg-gray-800">
                   <tr>
-                    <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase">Date</th>
-                    <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase">Change</th>
-                    <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase">Reason</th>
-                    <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase">User</th>
+                    <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase">Date</th>
+                    <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase">Change</th>
+                    <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase">Reason</th>
+                    <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase">Observations</th>
+                    <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase">User</th>
                   </tr>
                 </thead>
                 <tbody className="bg-white dark:bg-gray-800 divide-y divide-gray-200 dark:divide-gray-700">
                   {history.map((item) => (
-                    <tr key={item._id}>
-                      <td className="px-4 py-3 text-sm text-gray-900">
+                    <tr key={item._id} className="bg-white dark:bg-gray-900">
+                      <td className="px-4 py-3 text-sm text-gray-900 dark:text-gray-100">
                         {new Date(item.createdAt).toLocaleString()}
                       </td>
                       <td className="px-4 py-3 text-sm">
-                        <span className={`px-2 py-1 rounded ${item.change > 0 ? 'bg-green-100 text-green-800' : 'bg-red-100 text-red-800'}`}>
+                        <span className={`px-2 py-1 rounded ${item.change > 0 ? 'bg-green-100 dark:bg-green-900 dark:text-green-200 text-green-800' : 'bg-red-100 dark:bg-red-900 dark:text-red-200 text-red-800'}`}>
                           {item.change > 0 ? '+' : ''}{item.change}
                         </span>
-                        <span className="ml-2 text-gray-600">
+                        <span className="ml-2 text-gray-600 dark:text-gray-300">
                           ({item.previousStock} → {item.newStock})
                         </span>
                       </td>
-                      <td className="px-4 py-3 text-sm text-gray-900">{item.reason}</td>
-                      <td className="px-4 py-3 text-sm text-gray-900">
+                      <td className="px-4 py-3 text-sm text-gray-900 dark:text-gray-100">{item.reason}</td>
+                      <td className="px-4 py-3 text-sm text-gray-900 dark:text-gray-100">{item.notes || ''}</td>
+                      <td className="px-4 py-3 text-sm text-gray-900 dark:text-gray-100">
                         {item.userId?.username || 'Unknown'}
                       </td>
                     </tr>
@@ -595,7 +709,7 @@ export default function AdminProductsPage() {
             <div className="mt-6 flex justify-end">
               <button
                 onClick={() => setShowHistoryModal(false)}
-                className="px-4 py-2 bg-gray-200 text-gray-800 rounded-lg hover:bg-gray-300"
+                className="px-4 py-2 bg-gray-200 dark:bg-gray-700 text-gray-800 dark:text-gray-100 rounded-lg hover:bg-gray-300 dark:hover:bg-gray-600"
               >
                 Close
               </button>

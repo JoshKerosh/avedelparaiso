@@ -118,7 +118,7 @@ export default function ProductDetailPage() {
 
               <div className="flex items-center gap-4 mb-6">
                 <p className="text-4xl font-bold text-blue-600 dark:text-blue-400">
-                  ${product.price.toFixed(2)}
+                  ₡{product.price.toLocaleString('es-CR', { maximumFractionDigits: 0 })}
                 </p>
                 <span className={`px-3 py-1 rounded-full text-sm font-medium ${status.color}`}>
                   {status.text}

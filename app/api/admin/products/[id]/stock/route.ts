@@ -18,7 +18,7 @@ export async function POST(
     await connectDB();
     const { id } = await params;
     const body = await request.json();
-    const { change, reason } = body;
+    const { change, reason, notes } = body;
 
     const product = await Product.findById(id);
 
@@ -44,6 +44,7 @@ export async function POST(
       newStock,
       change,
       reason: reason || 'Manual Adjustment',
+      notes: notes || '',
       userId: session.user.id,
     });
 

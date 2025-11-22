@@ -7,6 +7,7 @@ export interface IStockHistory {
   newStock: number;
   change: number;
   reason?: string;
+  notes?: string;
   userId: mongoose.Types.ObjectId;
   createdAt: Date;
 }
@@ -32,6 +33,10 @@ const StockHistorySchema = new Schema<IStockHistory>({
   reason: {
     type: String,
     default: 'Manual Adjustment',
+  },
+  notes: {
+    type: String,
+    default: '',
   },
   userId: {
     type: Schema.Types.ObjectId,

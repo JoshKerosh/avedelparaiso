@@ -294,7 +294,7 @@ export default function ProductsPage() {
                           </h3>
                           <div className="flex justify-between items-center mb-2">
                             <p className="text-lg font-bold text-blue-600 dark:text-blue-400">
-                              ${product.price.toFixed(2)}
+                              ₡{product.price.toLocaleString('es-CR', { maximumFractionDigits: 0 })}
                             </p>
                             <span className={`text-xs px-2 py-1 rounded ${status.color}`}>
                               {status.text}

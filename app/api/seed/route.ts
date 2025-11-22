@@ -1,3 +1,5 @@
+  // Tipo de cambio fijo USD → CRC
+  const USD_TO_CRC = 500;
 import { NextRequest, NextResponse } from 'next/server';
 import bcrypt from 'bcryptjs';
 import connectDB from '@/lib/mongodb';
@@ -136,7 +138,7 @@ export async function GET(request: NextRequest) {
       {
         name: '[TEST] Dell XPS 15 Laptop',
         description: 'High-performance laptop with Intel i7, 16GB RAM, 512GB SSD. Perfect for professionals and content creators.',
-        price: 1299.99,
+        price: Math.round(1299.99 * USD_TO_CRC),
         stock: 15,
         lowStockThreshold: 5,
         category1Id: electronics._id,
@@ -150,7 +152,7 @@ export async function GET(request: NextRequest) {
       {
         name: '[TEST] MacBook Pro 16"',
         description: 'Apple M2 Pro chip, 32GB unified memory, 1TB SSD. Professional-grade performance.',
-        price: 2499.99,
+        price: Math.round(2499.99 * USD_TO_CRC),
         stock: 8,
         lowStockThreshold: 3,
         category1Id: electronics._id,
@@ -163,7 +165,7 @@ export async function GET(request: NextRequest) {
       {
         name: '[TEST] HP Pavilion Gaming Laptop',
         description: 'AMD Ryzen 7, NVIDIA RTX 3060, 16GB RAM, 512GB SSD. Excellent for gaming and multitasking.',
-        price: 899.99,
+        price: Math.round(899.99 * USD_TO_CRC),
         stock: 22,
         lowStockThreshold: 10,
         category1Id: electronics._id,
@@ -176,7 +178,7 @@ export async function GET(request: NextRequest) {
       {
         name: '[TEST] Lenovo ThinkPad X1 Carbon',
         description: 'Business ultrabook with Intel i7, 16GB RAM, 256GB SSD. Lightweight and durable.',
-        price: 1499.99,
+        price: Math.round(1499.99 * USD_TO_CRC),
         stock: 3,
         lowStockThreshold: 5,
         category1Id: electronics._id,
@@ -189,7 +191,7 @@ export async function GET(request: NextRequest) {
       {
         name: '[TEST] ASUS ROG Gaming Laptop',
         description: 'Intel i9, RTX 4080, 32GB RAM, 2TB SSD. Ultimate gaming performance.',
-        price: 2899.99,
+        price: Math.round(2899.99 * USD_TO_CRC),
         stock: 0,
         lowStockThreshold: 2,
         category1Id: electronics._id,
@@ -203,7 +205,7 @@ export async function GET(request: NextRequest) {
       {
         name: '[TEST] iPhone 15 Pro',
         description: 'Latest Apple flagship with A17 Pro chip, 256GB storage, ProMotion display.',
-        price: 1099.99,
+        price: Math.round(1099.99 * USD_TO_CRC),
         stock: 45,
         lowStockThreshold: 15,
         category1Id: electronics._id,
@@ -217,7 +219,7 @@ export async function GET(request: NextRequest) {
       {
         name: '[TEST] Samsung Galaxy S24 Ultra',
         description: 'Premium Android phone with S Pen, 200MP camera, 512GB storage.',
-        price: 1199.99,
+        price: Math.round(1199.99 * USD_TO_CRC),
         stock: 38,
         lowStockThreshold: 10,
         category1Id: electronics._id,
@@ -230,7 +232,7 @@ export async function GET(request: NextRequest) {
       {
         name: '[TEST] Google Pixel 8 Pro',
         description: 'Pure Android experience with incredible AI features and camera.',
-        price: 899.99,
+        price: Math.round(899.99 * USD_TO_CRC),
         stock: 27,
         lowStockThreshold: 8,
         category1Id: electronics._id,
@@ -243,7 +245,7 @@ export async function GET(request: NextRequest) {
       {
         name: '[TEST] OnePlus 12',
         description: 'Flagship killer with Snapdragon 8 Gen 3, 16GB RAM, 256GB storage.',
-        price: 799.99,
+        price: Math.round(799.99 * USD_TO_CRC),
         stock: 19,
         lowStockThreshold: 10,
         category1Id: electronics._id,
@@ -256,7 +258,7 @@ export async function GET(request: NextRequest) {
       {
         name: '[TEST] Xiaomi 14 Pro',
         description: 'Premium specs at competitive price. Leica camera system.',
-        price: 699.99,
+        price: Math.round(699.99 * USD_TO_CRC),
         stock: 5,
         lowStockThreshold: 8,
         category1Id: electronics._id,
@@ -270,7 +272,7 @@ export async function GET(request: NextRequest) {
       {
         name: '[TEST] Classic White Oxford Shirt',
         description: '100% cotton, slim fit, perfect for office or casual wear.',
-        price: 49.99,
+        price: Math.round(49.99 * USD_TO_CRC),
         stock: 120,
         lowStockThreshold: 30,
         category1Id: clothing._id,
@@ -283,7 +285,7 @@ export async function GET(request: NextRequest) {
       {
         name: '[TEST] Linen Summer Shirt',
         description: 'Breathable linen fabric, available in multiple colors.',
-        price: 59.99,
+        price: Math.round(59.99 * USD_TO_CRC),
         stock: 85,
         lowStockThreshold: 25,
         category1Id: clothing._id,
@@ -296,7 +298,7 @@ export async function GET(request: NextRequest) {
       {
         name: '[TEST] Flannel Plaid Shirt',
         description: 'Warm and cozy for winter, classic plaid pattern.',
-        price: 44.99,
+        price: Math.round(44.99 * USD_TO_CRC),
         stock: 2,
         lowStockThreshold: 20,
         category1Id: clothing._id,
@@ -309,7 +311,7 @@ export async function GET(request: NextRequest) {
       {
         name: '[TEST] Denim Chambray Shirt',
         description: 'Versatile denim shirt, pairs well with any outfit.',
-        price: 54.99,
+        price: Math.round(54.99 * USD_TO_CRC),
         stock: 67,
         lowStockThreshold: 15,
         category1Id: clothing._id,
@@ -322,7 +324,7 @@ export async function GET(request: NextRequest) {
       {
         name: '[TEST] Performance Polo Shirt',
         description: 'Moisture-wicking fabric, perfect for sports and casual wear.',
-        price: 39.99,
+        price: Math.round(39.99 * USD_TO_CRC),
         stock: 95,
         lowStockThreshold: 30,
         category1Id: clothing._id,
@@ -336,7 +338,7 @@ export async function GET(request: NextRequest) {
       {
         name: '[TEST] Ergonomic Office Chair',
         description: 'Lumbar support, adjustable height, mesh back for breathability.',
-        price: 299.99,
+        price: Math.round(299.99 * USD_TO_CRC),
         stock: 34,
         lowStockThreshold: 10,
         category1Id: home._id,
@@ -350,7 +352,7 @@ export async function GET(request: NextRequest) {
       {
         name: '[TEST] Gaming Chair RGB',
         description: 'Racing style chair with RGB lighting, reclining backrest.',
-        price: 349.99,
+        price: Math.round(349.99 * USD_TO_CRC),
         stock: 18,
         lowStockThreshold: 8,
         category1Id: home._id,
@@ -363,7 +365,7 @@ export async function GET(request: NextRequest) {
       {
         name: '[TEST] Wooden Dining Chair Set',
         description: 'Set of 4 solid wood chairs, classic design.',
-        price: 399.99,
+        price: Math.round(399.99 * USD_TO_CRC),
         stock: 12,
         lowStockThreshold: 5,
         category1Id: home._id,
@@ -376,7 +378,7 @@ export async function GET(request: NextRequest) {
       {
         name: '[TEST] Velvet Accent Chair',
         description: 'Luxurious velvet upholstery, perfect for living room.',
-        price: 449.99,
+        price: Math.round(449.99 * USD_TO_CRC),
         stock: 0,
         lowStockThreshold: 3,
         category1Id: home._id,
@@ -389,7 +391,7 @@ export async function GET(request: NextRequest) {
       {
         name: '[TEST] Recliner Chair with Ottoman',
         description: 'Comfortable recliner with matching ottoman, multiple colors.',
-        price: 599.99,
+        price: Math.round(599.99 * USD_TO_CRC),
         stock: 9,
         lowStockThreshold: 5,
         category1Id: home._id,
@@ -403,7 +405,7 @@ export async function GET(request: NextRequest) {
       {
         name: '[TEST] Wireless Mouse',
         description: 'Ergonomic wireless mouse with 6 programmable buttons.',
-        price: 29.99,
+        price: Math.round(29.99 * USD_TO_CRC),
         stock: 150,
         lowStockThreshold: 40,
         category1Id: electronics._id,
@@ -416,7 +418,7 @@ export async function GET(request: NextRequest) {
       {
         name: '[TEST] Mechanical Keyboard',
         description: 'RGB backlit mechanical keyboard, Cherry MX switches.',
-        price: 119.99,
+        price: Math.round(119.99 * USD_TO_CRC),
         stock: 42,
         lowStockThreshold: 15,
         category1Id: electronics._id,
@@ -429,7 +431,7 @@ export async function GET(request: NextRequest) {
       {
         name: '[TEST] Phone Case Premium',
         description: 'Military-grade drop protection, slim design.',
-        price: 24.99,
+        price: Math.round(24.99 * USD_TO_CRC),
         stock: 230,
         lowStockThreshold: 50,
         category1Id: electronics._id,
@@ -442,7 +444,7 @@ export async function GET(request: NextRequest) {
       {
         name: '[TEST] Designer Jeans',
         description: 'Premium denim, slim fit, distressed finish.',
-        price: 89.99,
+        price: Math.round(89.99 * USD_TO_CRC),
         stock: 6,
         lowStockThreshold: 20,
         category1Id: clothing._id,
@@ -455,7 +457,7 @@ export async function GET(request: NextRequest) {
       {
         name: '[TEST] Table Lamp Modern',
         description: 'Contemporary design, dimmable LED, touch control.',
-        price: 79.99,
+        price: Math.round(79.99 * USD_TO_CRC),
         stock: 55,
         lowStockThreshold: 12,
         category1Id: home._id,
