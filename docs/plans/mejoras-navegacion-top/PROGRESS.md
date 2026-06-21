@@ -12,7 +12,7 @@ commits y dejar el "siguiente paso" claro para retomar sin contexto previo.
 | Fase | Archivo | Estado | Commit |
 |------|---------|--------|--------|
 | 1 — Navbar + layout + footer | [FASE-1](./FASE-1-navbar-layout-footer.md) | ✅ Completada | `b9c8cb2` |
-| 2 — Catálogo + filtros | [FASE-2](./FASE-2-catalogo-filtros.md) | ⬜ Pendiente | — |
+| 2 — Catálogo + filtros | [FASE-2](./FASE-2-catalogo-filtros.md) | ✅ Completada | `912053b` |
 | 3 — Detalle + tarjetas + home | [FASE-3](./FASE-3-detalle-tarjetas-home.md) | ⬜ Pendiente | — |
 | 4 — Idioma: estados + admin | [FASE-4](./FASE-4-idioma-estados-admin.md) | ⬜ Pendiente | — |
 
@@ -55,3 +55,16 @@ commits y dejar el "siguiente paso" claro para retomar sin contexto previo.
 - Gaps: ninguno nuevo. (Home/products siguen en inglés → se traducen en Fases 2-3, planificado.)
 - Commit: `b9c8cb2`
 - Siguiente paso: **Fase 2** (catálogo + filtros).
+
+### 2026-06-21 — Fase 2 (Catálogo + filtros) ✅
+- Hecho:
+  - `app/products/page.tsx`: breadcrumb (Inicio/Productos), título "Todos los productos",
+    contador con plural correcto, vacío y paginación en español, `aria-label="Paginación"`.
+  - `components/ProductFilters.tsx`: chips de filtros activos con quitar individual
+    (búsqueda, cat 1/2/3, orden) + todos los labels/opciones traducidos.
+- Verificación: lint 0 errores (16 warnings preexistentes), build OK.
+  Runtime (Playwright): chip "Búsqueda: anillo" aparece y al pulsar × la URL pasa de
+  `?search=anillo` a `/products`; labels y orden en español; 0 errores de consola.
+- Gaps: ninguno nuevo. (Tarjeta sigue mostrando "Low Stock"/"in stock" → Fase 3.)
+- Commit: `912053b`
+- Siguiente paso: **Fase 3** (detalle + tarjetas + home).
