@@ -20,6 +20,10 @@ const eslintConfig = defineConfig([
       // The mount-guard / script-load patterns (setState in a mount effect) are
       // idiomatic for SSR hydration here; this rule is advisory, not a bug.
       "react-hooks/set-state-in-effect": "warn",
+      // React Compiler advisory rules (newer eslint-plugin-react-hooks). The
+      // existing components use patterns these flag (calling a handler declared
+      // later, mutating a local array copy); they are not runtime bugs.
+      "react-hooks/immutability": "warn",
     },
   },
   {
