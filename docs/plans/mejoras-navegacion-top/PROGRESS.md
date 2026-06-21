@@ -15,6 +15,7 @@ commits y dejar el "siguiente paso" claro para retomar sin contexto previo.
 | 2 — Catálogo + filtros | [FASE-2](./FASE-2-catalogo-filtros.md) | ✅ Completada | `912053b` |
 | 3 — Detalle + tarjetas + home | [FASE-3](./FASE-3-detalle-tarjetas-home.md) | ✅ Completada | `234f31f` |
 | 4 — Idioma: estados + admin | [FASE-4](./FASE-4-idioma-estados-admin.md) | ✅ Completada | `6a33f1d` |
+| 5 — i18n admin + datos (KG-1/KG-2) | [FASE-5](./FASE-5-i18n-admin-y-datos.md) | ✅ Completada | `973a347` |
 
 > Leyenda: ⬜ Pendiente · 🟡 En progreso · ✅ Completada · ⏸️ Bloqueada
 
@@ -100,6 +101,20 @@ commits y dejar el "siguiente paso" claro para retomar sin contexto previo.
   [KNOWN-GAPS.md](./KNOWN-GAPS.md) (KG-1, fuera de alcance de este plan).
 - Commit: `6a33f1d`
 
+### 2026-06-21 — Fase 5 (i18n admin + datos placeholder) ✅
+- Hecho (resuelve KG-1 y KG-2 de KNOWN-GAPS):
+  - Traducción completa del back-office: `login`, `products`, `categories`, `settings` y los
+    modales (`ReduceStockModal`, `ConfirmReduceModal`, `StockHistoryModal`, `ProductFormModal`,
+    `ProductsTable`). Fechas `es-CR` en el historial; eliminado un `confirm` duplicado en inglés.
+  - KG-2: `scripts/fix-placeholder-descriptions.ts` (idempotente) reemplazó "Hxhxbxb" en
+    "Anillo estrella"; "Sofi tech"/"Vestido Dee" intactos (contenido del usuario).
+- Verificación: lint 0 errores, build OK, 25 tests OK.
+  Runtime (Playwright): panel de productos y modales en español; detalle de "Anillo estrella"
+  ya muestra descripción presentable; 0 errores de consola.
+- Gaps: KG-1 y KG-2 **resueltos** (ver [KNOWN-GAPS.md](./KNOWN-GAPS.md) y [GAPS.md](./GAPS.md)).
+- Commit: `973a347`
+
 ## ✅ Plan completado
-Las 4 fases están ✅ y `GAPS.md` no tiene gaps abiertos. Las limitaciones restantes viven
-documentadas en `KNOWN-GAPS.md`. Rama `feature/mejoras-navegacion-top` lista para PR a `master`.
+Las 5 fases están ✅. `GAPS.md` y `KNOWN-GAPS.md` no tienen gaps abiertos (KG-1 y KG-2
+resueltos en Fase 5). Toda la UI —pública y admin— quedó en español. Rama
+`feature/mejoras-navegacion-top` lista para PR a `master`.

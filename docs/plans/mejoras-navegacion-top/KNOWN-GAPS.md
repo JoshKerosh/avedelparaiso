@@ -1,25 +1,29 @@
-# KNOWN-GAPS — Limitaciones conocidas (fuera de alcance de este plan)
+# KNOWN-GAPS — Limitaciones conocidas
 
-Gaps reales pero **no resolubles dentro de las fases de este plan de navegación** (requieren
-un esfuerzo o decisión que excede el alcance acordado). Documentados para seguimiento futuro.
+Gaps documentados para seguimiento. Los que se resuelven se marcan y se mueven su detalle
+a la bitácora de [PROGRESS.md](./PROGRESS.md).
 
-## KG-1 — Sub-páginas y modales del panel admin aún en inglés
-- **Qué:** Fuera del dashboard (`app/admin/page.tsx`, ya traducido), el resto del panel admin
-  conserva texto en inglés:
-  - `app/admin/products/page.tsx`, `app/admin/categories/page.tsx`, `app/admin/settings/page.tsx`.
-  - Modales: `ReduceStockModal` ("Reduce Stock", "Amount to reduce", "Reason",
-    "Observations", "Cancel", "Accept"), `ConfirmReduceModal` ("Confirm Reduction",
-    "Cancel", "Confirm"), `StockHistoryModal`, `ProductFormModal`.
-  - `components/admin/ProductsTable.tsx` y toasts varios.
-- **Por qué queda fuera:** El alcance de este plan es la **navegación pública** + coherencia
-  del **dashboard** admin. Traducir todo el back-office es un esfuerzo transversal mayor
-  (muchas cadenas, formularios y validaciones) que merece su propio plan/fase.
-- **Sugerencia futura:** Plan dedicado "i18n del panel admin" (o introducir una librería de
-  i18n como `next-intl` si se requiere multi-idioma real).
-- **Nota:** El GAP de **códigos de motivo** sí se resolvió (ver [GAPS.md](./GAPS.md) · GAP-1),
-  porque afectaba también a la vista pública de coherencia y era de bajo riesgo.
+> Estado: 🔴 Abierto · 🟢 Resuelto
 
-## KG-2 — Datos de productos de ejemplo con descripciones placeholder
-- **Qué:** Algunos productos sembrados tienen descripciones tipo "Hxhxbxb".
-- **Por qué queda fuera:** Es contenido/data de seed, no navegación ni código.
-- **Sugerencia futura:** Limpiar datos de seed o cargar catálogo real antes de producción.
+## KG-1 — Sub-páginas y modales del panel admin en inglés 🟢 Resuelto (Fase 5)
+- **Era:** fuera del dashboard, el panel admin conservaba texto en inglés (login, products,
+  categories, settings y los modales ReduceStock/ConfirmReduce/StockHistory/ProductForm,
+  más ProductsTable).
+- **Resuelto:** Fase 5 tradujo todas las páginas y componentes admin al español (sin librería
+  de i18n), incluidas fechas `es-CR` y la eliminación de un `confirm` duplicado en inglés.
+  Commit `973a347`. Verificado en runtime.
+
+## KG-2 — Datos de productos con descripción placeholder 🟢 Resuelto (Fase 5)
+- **Era:** el producto "Anillo estrella" tenía la descripción basura "Hxhxbxb".
+- **Resuelto:** script idempotente `scripts/fix-placeholder-descriptions.ts` que solo
+  reemplaza el valor si sigue siendo el placeholder. "Sofi tech" y "Vestido Dee" se dejaron
+  intactos por ser contenido propio del usuario (editables desde el admin).
+  Commit `973a347`. Verificado en el detalle público.
+
+---
+
+### Notas / posibles mejoras futuras (no son gaps bloqueantes)
+- Si en el futuro se requiere **multi-idioma conmutable** (no solo español), valdría introducir
+  una librería como `next-intl` y extraer las cadenas a archivos de traducción.
+- Deuda menor: `ProductFilters.tsx` consume `/api/admin/categories/children/[parentId]`
+  (pública de facto, sin auth). Opcional: exponer una ruta `/api/categories/...`.

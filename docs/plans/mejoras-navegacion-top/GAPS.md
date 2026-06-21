@@ -18,3 +18,9 @@ cerrarlos. Los no resolubles dentro de estas fases se mueven a [KNOWN-GAPS.md](.
   (`STOCK_REASON_LABELS` + `getReasonLabel` en `lib/product-ui.ts`). Los valores
   almacenados siguen siendo los códigos; solo cambia el render.
 - **Resuelto en:** Fase 4, commit de la fase. Verificado en runtime.
+
+## GAP-2 — KNOWN-GAPS KG-1/KG-2 promovidos a trabajo 🟢 Resuelto
+- **Detectado en:** a petición del usuario tras cerrar el plan original.
+- **Qué:** se decidió resolver los dos KNOWN-GAPS (back-office admin en inglés y datos
+  placeholder) en lugar de dejarlos diferidos.
+- **Resuelto en:** Fase 5 (commit `973a347`). Ver [KNOWN-GAPS.md](./KNOWN-GAPS.md).
