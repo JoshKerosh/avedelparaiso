@@ -1,10 +1,11 @@
 'use client';
 
 import Link from 'next/link';
-import { usePathname, useRouter, useSearchParams } from 'next/navigation';
-import ThemeToggle from './ThemeToggle';
+import { usePathname } from 'next/navigation';
+import { Suspense, useEffect, useState } from 'react';
 import { useSession, signOut } from 'next-auth/react';
-import { useEffect, useRef, useState } from 'react';
+import ThemeToggle from './ThemeToggle';
+import NavSearch from './NavSearch';
 
 interface NavLink {
   href: string;
@@ -20,36 +21,18 @@ const LINKS: NavLink[] = [
 
 export default function Navigation() {
   const [isOpen, setIsOpen] = useState(false);
-  const [search, setSearch] = useState('');
   const { status } = useSession();
   const isAdmin = status === 'authenticated';
   const pathname = usePathname();
-  const router = useRouter();
-  const searchParams = useSearchParams();
-  const searchRef = useRef<HTMLFormElement>(null);
 
   // Close the mobile menu whenever the route changes.
   useEffect(() => {
     setIsOpen(false);
   }, [pathname]);
 
-  // Keep the navbar search in sync with the catalog's active query.
-  useEffect(() => {
-    if (pathname === '/products') {
-      setSearch(searchParams.get('search') ?? '');
-    }
-  }, [pathname, searchParams]);
-
   function isActive(href: string): boolean {
     if (href === '/') return pathname === '/';
     return pathname === href || pathname.startsWith(`${href}/`);
-  }
-
-  function submitSearch(e: React.FormEvent) {
-    e.preventDefault();
-    const q = search.trim();
-    router.push(q ? `/products?search=${encodeURIComponent(q)}` : '/products');
-    setIsOpen(false);
   }
 
   const visibleLinks = LINKS.filter((l) => !l.adminOnly || isAdmin);
@@ -80,32 +63,9 @@ export default function Navigation() {
           </div>
 
           {/* Desktop search */}
-          <form
-            ref={searchRef}
-            onSubmit={submitSearch}
-            role="search"
-            className="hidden md:flex flex-1 max-w-md items-center"
-          >
-            <div className="relative w-full">
-              <input
-                type="search"
-                value={search}
-                onChange={(e) => setSearch(e.target.value)}
-                placeholder="Buscar productos..."
-                aria-label="Buscar productos"
-                className="w-full pl-10 pr-3 py-2 rounded-lg border border-gray-300 dark:border-gray-600 bg-gray-50 dark:bg-gray-700 text-gray-900 dark:text-white placeholder-gray-500 dark:placeholder-gray-400 focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-              />
-              <svg
-                className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400"
-                fill="none"
-                viewBox="0 0 24 24"
-                stroke="currentColor"
-                aria-hidden
-              >
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 21l-4.35-4.35M11 18a7 7 0 100-14 7 7 0 000 14z" />
-              </svg>
-            </div>
-          </form>
+          <Suspense fallback={<div className="hidden md:block flex-1 max-w-md" />}>
+            <NavSearch variant="desktop" />
+          </Suspense>
 
           {/* Desktop Menu */}
           <div className="hidden md:flex items-center space-x-6 flex-shrink-0">
@@ -163,16 +123,9 @@ export default function Navigation() {
         {/* Mobile Menu */}
         {isOpen && (
           <div id="mobile-menu" className="md:hidden py-4 border-t border-gray-200 dark:border-gray-700">
-            <form onSubmit={submitSearch} role="search" className="mb-4">
-              <input
-                type="search"
-                value={search}
-                onChange={(e) => setSearch(e.target.value)}
-                placeholder="Buscar productos..."
-                aria-label="Buscar productos"
-                className="w-full px-3 py-2 rounded-lg border border-gray-300 dark:border-gray-600 bg-gray-50 dark:bg-gray-700 text-gray-900 dark:text-white placeholder-gray-500 dark:placeholder-gray-400 focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-              />
-            </form>
+            <Suspense fallback={null}>
+              <NavSearch variant="mobile" onSubmitted={() => setIsOpen(false)} />
+            </Suspense>
             <div className="flex flex-col space-y-2">
               {visibleLinks.map((link) => {
                 const active = isActive(link.href);
