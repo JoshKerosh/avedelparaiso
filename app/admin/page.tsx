@@ -4,6 +4,7 @@ import { useEffect, useState } from 'react';
 import Link from 'next/link';
 import ProtectedRoute from '@/components/ProtectedRoute';
 import toast from 'react-hot-toast';
+import { getReasonLabel } from '@/lib/product-ui';
 
 interface RecentStockChange {
   _id: string;
@@ -39,11 +40,11 @@ export default function AdminDashboardPage() {
         const result = await response.json();
         setData(result);
       } else {
-        toast.error('Failed to load dashboard data');
+        toast.error('No se pudieron cargar los datos del panel');
       }
     } catch (error) {
       console.error('Error fetching dashboard:', error);
-      toast.error('An error occurred');
+      toast.error('Ocurrió un error');
     } finally {
       setLoading(false);
     }
@@ -54,8 +55,8 @@ export default function AdminDashboardPage() {
       <div className="min-h-screen bg-gray-50 dark:bg-gray-900">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
           <div className="mb-8">
-            <h1 className="text-3xl font-bold text-gray-900 dark:text-white">Admin Dashboard</h1>
-            <p className="mt-2 text-gray-600 dark:text-gray-400">Manage your inventory</p>
+            <h1 className="text-3xl font-bold text-gray-900 dark:text-white">Panel de administración</h1>
+            <p className="mt-2 text-gray-600 dark:text-gray-400">Gestiona tu inventario</p>
           </div>
 
           {/* Navigation Cards */}
@@ -64,55 +65,55 @@ export default function AdminDashboardPage() {
               href="/admin/products"
               className="bg-white dark:bg-gray-800 p-6 rounded-lg shadow hover:shadow-lg transition-shadow"
             >
-              <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-2">Products</h3>
-              <p className="text-gray-600 dark:text-gray-400">Manage inventory</p>
+              <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-2">Productos</h3>
+              <p className="text-gray-600 dark:text-gray-400">Gestionar inventario</p>
             </Link>
 
             <Link
               href="/admin/categories"
               className="bg-white dark:bg-gray-800 p-6 rounded-lg shadow hover:shadow-lg transition-shadow"
             >
-              <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-2">Categories</h3>
-              <p className="text-gray-600 dark:text-gray-400">Organize products</p>
+              <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-2">Categorías</h3>
+              <p className="text-gray-600 dark:text-gray-400">Organizar productos</p>
             </Link>
 
             <Link
               href="/admin/settings"
               className="bg-white dark:bg-gray-800 p-6 rounded-lg shadow hover:shadow-lg transition-shadow"
             >
-              <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-2">Settings</h3>
-              <p className="text-gray-600 dark:text-gray-400">Hero banner</p>
+              <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-2">Configuración</h3>
+              <p className="text-gray-600 dark:text-gray-400">Banner principal</p>
             </Link>
 
             <Link
               href="/"
               className="bg-white dark:bg-gray-800 p-6 rounded-lg shadow hover:shadow-lg transition-shadow"
             >
-              <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-2">View Site</h3>
-              <p className="text-gray-600 dark:text-gray-400">Public view</p>
+              <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-2">Ver sitio</h3>
+              <p className="text-gray-600 dark:text-gray-400">Vista pública</p>
             </Link>
           </div>
 
           {loading ? (
             <div className="text-center py-12">
-              <p className="text-gray-500 dark:text-gray-400">Loading dashboard...</p>
+              <p className="text-gray-500 dark:text-gray-400">Cargando panel...</p>
             </div>
           ) : data ? (
             <>
               {/* Stats Cards */}
               <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
                 <div className="bg-white dark:bg-gray-800 p-6 rounded-lg shadow">
-                  <h3 className="text-sm font-medium text-gray-600 dark:text-gray-400 mb-2">Total Products</h3>
+                  <h3 className="text-sm font-medium text-gray-600 dark:text-gray-400 mb-2">Total de productos</h3>
                   <p className="text-3xl font-bold text-blue-600 dark:text-blue-400">{data.totalProducts}</p>
                 </div>
 
                 <div className="bg-white dark:bg-gray-800 p-6 rounded-lg shadow">
-                  <h3 className="text-sm font-medium text-gray-600 dark:text-gray-400 mb-2">Low Stock Items</h3>
+                  <h3 className="text-sm font-medium text-gray-600 dark:text-gray-400 mb-2">Bajo stock</h3>
                   <p className="text-3xl font-bold text-yellow-600 dark:text-yellow-400">{data.lowStockCount}</p>
                 </div>
 
                 <div className="bg-white dark:bg-gray-800 p-6 rounded-lg shadow">
-                  <h3 className="text-sm font-medium text-gray-600 dark:text-gray-400 mb-2">Out of Stock</h3>
+                  <h3 className="text-sm font-medium text-gray-600 dark:text-gray-400 mb-2">Agotados</h3>
                   <p className="text-3xl font-bold text-red-600 dark:text-red-400">{data.outOfStockCount}</p>
                 </div>
               </div>
@@ -127,12 +128,12 @@ export default function AdminDashboardPage() {
                       </svg>
                     </div>
                     <div className="ml-3">
-                      <h3 className="text-sm font-medium text-yellow-800">Low Stock Alert</h3>
+                      <h3 className="text-sm font-medium text-yellow-800">Alerta de bajo stock</h3>
                       <div className="mt-2 text-sm text-yellow-700">
                         <ul className="list-disc list-inside space-y-1">
                           {data.lowStockProducts.slice(0, 5).map((product) => (
                             <li key={product._id}>
-                              {product.name} - {product.stock} units (threshold: {product.lowStockThreshold})
+                              {product.name} - {product.stock} unidades (umbral: {product.lowStockThreshold})
                             </li>
                           ))}
                         </ul>
@@ -151,7 +152,7 @@ export default function AdminDashboardPage() {
                       </svg>
                     </div>
                     <div className="ml-3">
-                      <h3 className="text-sm font-medium text-red-800">Out of Stock</h3>
+                      <h3 className="text-sm font-medium text-red-800">Agotados</h3>
                       <div className="mt-2 text-sm text-red-700">
                         <ul className="list-disc list-inside space-y-1">
                           {data.outOfStockProducts.slice(0, 5).map((product) => (
@@ -167,26 +168,26 @@ export default function AdminDashboardPage() {
               {/* Recent Stock Changes */}
               <div className="bg-white dark:bg-gray-800 rounded-lg shadow overflow-hidden">
                 <div className="px-6 py-4 border-b border-gray-200 dark:border-gray-700">
-                  <h2 className="text-lg font-semibold text-gray-900 dark:text-white">Recent Stock Changes</h2>
+                  <h2 className="text-lg font-semibold text-gray-900 dark:text-white">Cambios de stock recientes</h2>
                 </div>
                 <div className="overflow-x-auto">
                   {data.recentStockChanges.length === 0 ? (
-                    <p className="px-6 py-4 text-gray-500 dark:text-gray-400">No stock changes yet</p>
+                    <p className="px-6 py-4 text-gray-500 dark:text-gray-400">Aún no hay cambios de stock</p>
                   ) : (
                     <table className="min-w-full divide-y divide-gray-200 dark:divide-gray-700">
                       <thead className="bg-gray-50 dark:bg-gray-700">
                         <tr>
                           <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">
-                            Product
+                            Producto
                           </th>
                           <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">
-                            Change
+                            Cambio
                           </th>
                           <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">
-                            Reason
+                            Motivo
                           </th>
                           <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">
-                            Date
+                            Fecha
                           </th>
                         </tr>
                       </thead>
@@ -194,7 +195,7 @@ export default function AdminDashboardPage() {
                         {data.recentStockChanges.map((change) => (
                           <tr key={change._id}>
                             <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900 dark:text-white">
-                              {change.productId?.name || 'Unknown'}
+                              {change.productId?.name || 'Desconocido'}
                             </td>
                             <td className="px-6 py-4 whitespace-nowrap text-sm">
                               <span
@@ -212,10 +213,10 @@ export default function AdminDashboardPage() {
                               </span>
                             </td>
                             <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-600 dark:text-gray-400">
-                              {change.reason || 'Manual Adjustment'}
+                              {getReasonLabel(change.reason)}
                             </td>
                             <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-600 dark:text-gray-400">
-                              {new Date(change.createdAt).toLocaleDateString()}
+                              {new Date(change.createdAt).toLocaleDateString('es-CR')}
                             </td>
                           </tr>
                         ))}
@@ -227,7 +228,7 @@ export default function AdminDashboardPage() {
             </>
           ) : (
             <div className="text-center py-12">
-              <p className="text-gray-500 dark:text-gray-400">No data available</p>
+              <p className="text-gray-500 dark:text-gray-400">No hay datos disponibles</p>
             </div>
           )}
         </div>

@@ -1,6 +1,7 @@
 'use client';
 
 import type { AdminProduct, ReduceReason } from '@/types/admin';
+import { STOCK_REASON_LABELS } from '@/lib/product-ui';
 
 const REASONS: ReduceReason[] = ['SALE', 'DAMAGED', 'ADJUSTMENT', 'OTHER'];
 
@@ -57,7 +58,7 @@ export default function ReduceStockModal({
                     onChange={() => setReason(option)}
                     className="accent-blue-600"
                   />
-                  {option}
+                  {STOCK_REASON_LABELS[option] ?? option}
                 </label>
               ))}
             </div>

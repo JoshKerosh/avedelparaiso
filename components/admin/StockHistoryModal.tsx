@@ -1,6 +1,7 @@
 'use client';
 
 import type { AdminProduct, StockHistoryItem } from '@/types/admin';
+import { getReasonLabel } from '@/lib/product-ui';
 
 interface StockHistoryModalProps {
   product: AdminProduct;
@@ -56,7 +57,7 @@ export default function StockHistoryModal({ product, history, onClose }: StockHi
                       ({item.previousStock} → {item.newStock})
                     </span>
                   </td>
-                  <td className="px-4 py-3 text-sm text-gray-900 dark:text-gray-100">{item.reason}</td>
+                  <td className="px-4 py-3 text-sm text-gray-900 dark:text-gray-100">{getReasonLabel(item.reason)}</td>
                   <td className="px-4 py-3 text-sm text-gray-900 dark:text-gray-100">{item.notes || ''}</td>
                   <td className="px-4 py-3 text-sm text-gray-900 dark:text-gray-100">
                     {item.userId?.username || 'Unknown'}

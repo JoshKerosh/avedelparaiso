@@ -21,3 +21,22 @@ export function getStockStatus(product: { stock: number; lowStockThreshold: numb
   }
   return { text: 'Disponible', color: 'bg-green-100 text-green-800' };
 }
+
+/**
+ * Spanish display labels for stock-change reason codes. Reasons are stored as
+ * codes in the DB (see ReduceReason + StockHistory default), so we map them at
+ * render time instead of migrating data. Unknown values fall back to the raw
+ * string, and missing reasons to the default "Ajuste manual".
+ */
+export const STOCK_REASON_LABELS: Record<string, string> = {
+  SALE: 'Venta',
+  DAMAGED: 'Dañado',
+  ADJUSTMENT: 'Ajuste',
+  OTHER: 'Otro',
+  'Manual Adjustment': 'Ajuste manual',
+};
+
+export function getReasonLabel(reason?: string): string {
+  if (!reason) return 'Ajuste manual';
+  return STOCK_REASON_LABELS[reason] ?? reason;
+}
