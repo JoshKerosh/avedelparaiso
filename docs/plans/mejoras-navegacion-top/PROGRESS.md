@@ -14,7 +14,7 @@ commits y dejar el "siguiente paso" claro para retomar sin contexto previo.
 | 1 — Navbar + layout + footer | [FASE-1](./FASE-1-navbar-layout-footer.md) | ✅ Completada | `b9c8cb2` |
 | 2 — Catálogo + filtros | [FASE-2](./FASE-2-catalogo-filtros.md) | ✅ Completada | `912053b` |
 | 3 — Detalle + tarjetas + home | [FASE-3](./FASE-3-detalle-tarjetas-home.md) | ✅ Completada | `234f31f` |
-| 4 — Idioma: estados + admin | [FASE-4](./FASE-4-idioma-estados-admin.md) | ⬜ Pendiente | — |
+| 4 — Idioma: estados + admin | [FASE-4](./FASE-4-idioma-estados-admin.md) | ✅ Completada | `6a33f1d` |
 
 > Leyenda: ⬜ Pendiente · 🟡 En progreso · ✅ Completada · ⏸️ Bloqueada
 
@@ -28,8 +28,10 @@ commits y dejar el "siguiente paso" claro para retomar sin contexto previo.
 - `ProductFilters.tsx` consume `/api/admin/categories/children/[parentId]` (sin auth, funciona).
   Deuda opcional: exponer ruta pública `/api/categories/...` reusando `getChildCategories`
   (`lib/products.ts:168`).
-- Posible necesidad de `<Suspense>` alrededor del buscador de la navbar por `useSearchParams()`
-  en Next 16 (confirmar en el build de Fase 1).
+- `useSearchParams()` de la navbar: resuelto aislándolo en `NavSearch` bajo `<Suspense>`
+  (Fase 1). Build OK.
+- Gaps detectados durante el desarrollo: ver [GAPS.md](./GAPS.md) (GAP-1 resuelto) y
+  [KNOWN-GAPS.md](./KNOWN-GAPS.md) (admin back-office aún en inglés — fuera de alcance).
 
 ## Bitácora
 <!-- Formato sugerido por entrada:
@@ -83,3 +85,21 @@ commits y dejar el "siguiente paso" claro para retomar sin contexto previo.
 - Gaps: ninguno nuevo (el ajuste singular/plural se resolvió en la misma fase).
 - Commit: `234f31f`
 - Siguiente paso: **Fase 4** (idioma: estados + admin).
+
+### 2026-06-21 — Fase 4 (Idioma: estados + admin) ✅
+- Hecho:
+  - `app/not-found.tsx` y `app/error.tsx`: copy y botones en español.
+  - `app/admin/page.tsx`: dashboard en español (tarjetas, stats, alertas, tabla) + fechas es-CR.
+  - **GAP-1** (códigos de motivo en inglés): `STOCK_REASON_LABELS` + `getReasonLabel` en
+    `lib/product-ui.ts`, aplicados en dashboard, `StockHistoryModal` y radios de
+    `ReduceStockModal` (sin migrar datos). Ver [GAPS.md](./GAPS.md).
+- Verificación: lint 0 errores, build OK, 25 tests OK.
+  Runtime (Playwright): 404 en español; dashboard en español; columna Motivo muestra
+  "Ajuste manual"/"Venta"; fechas es-CR; 0 errores de consola (salvo el status 404 esperado).
+- Gaps: GAP-1 **resuelto**. Resto del back-office admin en inglés → documentado en
+  [KNOWN-GAPS.md](./KNOWN-GAPS.md) (KG-1, fuera de alcance de este plan).
+- Commit: `6a33f1d`
+
+## ✅ Plan completado
+Las 4 fases están ✅ y `GAPS.md` no tiene gaps abiertos. Las limitaciones restantes viven
+documentadas en `KNOWN-GAPS.md`. Rama `feature/mejoras-navegacion-top` lista para PR a `master`.
