@@ -84,7 +84,7 @@ export default function AdminProductsPage() {
       setProducts(data.products || []);
     } catch (error) {
       console.error('Error fetching products:', error);
-      toast.error('Failed to load products');
+      toast.error('No se pudieron cargar los productos');
     } finally {
       setLoading(false);
     }
@@ -174,7 +174,7 @@ export default function AdminProductsPage() {
     e.preventDefault();
 
     if (formData.images.length === 0) {
-      toast.error('Please upload at least one image');
+      toast.error('Sube al menos una imagen');
       return;
     }
 
@@ -201,35 +201,35 @@ export default function AdminProductsPage() {
       });
 
       if (response.ok) {
-        toast.success(`Product ${modalMode === 'add' ? 'created' : 'updated'} successfully!`);
+        toast.success(`¡Producto ${modalMode === 'add' ? 'creado' : 'actualizado'} con éxito!`);
         closeModal();
         fetchProducts();
       } else {
         const data = await response.json();
-        toast.error(data.error || 'Failed to save product');
+        toast.error(data.error || 'No se pudo guardar el producto');
       }
     } catch (error) {
       console.error('Error saving product:', error);
-      toast.error('An error occurred');
+      toast.error('Ocurrió un error');
     }
   };
 
   const handleDelete = async (product: AdminProduct) => {
-    if (!window.confirm(`Are you sure you want to delete "${product.name}"?`)) return;
+    if (!window.confirm(`¿Seguro que quieres eliminar "${product.name}"?`)) return;
 
     try {
       const response = await fetch(`/api/admin/products/${product._id}`, { method: 'DELETE' });
 
       if (response.ok) {
-        toast.success('Product deleted successfully!');
+        toast.success('¡Producto eliminado con éxito!');
         fetchProducts();
       } else {
         const data = await response.json();
-        toast.error(data.error || 'Failed to delete product');
+        toast.error(data.error || 'No se pudo eliminar el producto');
       }
     } catch (error) {
       console.error('Error deleting product:', error);
-      toast.error('An error occurred');
+      toast.error('Ocurrió un error');
     }
   };
 
@@ -242,15 +242,15 @@ export default function AdminProductsPage() {
       });
 
       if (response.ok) {
-        toast.success('Stock updated!');
+        toast.success('¡Stock actualizado!');
         fetchProducts();
       } else {
         const data = await response.json();
-        toast.error(data.error || 'Failed to update stock');
+        toast.error(data.error || 'No se pudo actualizar el stock');
       }
     } catch (error) {
       console.error('Error adjusting stock:', error);
-      toast.error('An error occurred');
+      toast.error('Ocurrió un error');
     }
   };
 
@@ -263,7 +263,7 @@ export default function AdminProductsPage() {
       setShowHistoryModal(true);
     } catch (error) {
       console.error('Error fetching history:', error);
-      toast.error('Failed to load history');
+      toast.error('No se pudo cargar el historial');
     }
   };
 
@@ -286,15 +286,15 @@ export default function AdminProductsPage() {
         body: JSON.stringify({ change: -reduceAmount, reason: reduceReason, notes: reduceNotes }),
       });
       if (response.ok) {
-        toast.success('Stock reduced!');
+        toast.success('¡Stock reducido!');
         fetchProducts();
       } else {
         const data = await response.json();
-        toast.error(data.error || 'Failed to reduce stock');
+        toast.error(data.error || 'No se pudo reducir el stock');
       }
     } catch (error) {
       console.error('Error reducing stock:', error);
-      toast.error('An error occurred');
+      toast.error('Ocurrió un error');
     }
   };
 
@@ -304,25 +304,25 @@ export default function AdminProductsPage() {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
           <div className="mb-8 flex justify-between items-center">
             <div>
-              <h1 className="text-3xl font-bold text-gray-900 dark:text-gray-100">Products</h1>
-              <p className="mt-2 text-gray-600 dark:text-gray-300">Manage your inventory</p>
+              <h1 className="text-3xl font-bold text-gray-900 dark:text-gray-100">Productos</h1>
+              <p className="mt-2 text-gray-600 dark:text-gray-300">Gestiona tu inventario</p>
             </div>
             <button
               onClick={openAddModal}
               className="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors"
             >
-              Add Product
+              Agregar producto
             </button>
           </div>
 
           {loading ? (
             <div className="text-center py-12">
-              <p className="text-gray-500 dark:text-gray-400">Loading products...</p>
+              <p className="text-gray-500 dark:text-gray-400">Cargando productos...</p>
             </div>
           ) : products.length === 0 ? (
             <div className="bg-white dark:bg-gray-800 rounded-lg shadow p-8 text-center">
               <p className="text-gray-500 dark:text-gray-400">
-                No products yet. Create your first product to get started.
+                Aún no hay productos. Crea tu primer producto para empezar.
               </p>
             </div>
           ) : (

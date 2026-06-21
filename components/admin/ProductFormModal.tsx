@@ -44,12 +44,12 @@ export default function ProductFormModal({
         onClick={(e) => e.stopPropagation()}
       >
         <h2 className="text-xl font-bold text-gray-900 dark:text-gray-100 mb-4">
-          {mode === 'add' ? 'Add Product' : 'Edit Product'}
+          {mode === 'add' ? 'Agregar producto' : 'Editar producto'}
         </h2>
 
         <form onSubmit={onSubmit} className="space-y-4">
           <div>
-            <label className="block text-sm font-medium text-gray-700 dark:text-gray-200 mb-2">Name *</label>
+            <label className="block text-sm font-medium text-gray-700 dark:text-gray-200 mb-2">Nombre *</label>
             <input
               type="text"
               value={formData.name}
@@ -60,7 +60,7 @@ export default function ProductFormModal({
           </div>
 
           <div>
-            <label className="block text-sm font-medium text-gray-700 dark:text-gray-200 mb-2">Description *</label>
+            <label className="block text-sm font-medium text-gray-700 dark:text-gray-200 mb-2">Descripción *</label>
             <textarea
               value={formData.description}
               onChange={(e) => setFormData({ ...formData, description: e.target.value })}
@@ -72,7 +72,7 @@ export default function ProductFormModal({
 
           <div className="grid grid-cols-3 gap-4">
             <div>
-              <label className="block text-sm font-medium text-gray-700 dark:text-gray-200 mb-2">Price *</label>
+              <label className="block text-sm font-medium text-gray-700 dark:text-gray-200 mb-2">Precio *</label>
               <input
                 type="number"
                 step="0.01"
@@ -93,7 +93,7 @@ export default function ProductFormModal({
               />
             </div>
             <div>
-              <label className="block text-sm font-medium text-gray-700 dark:text-gray-200 mb-2">Low Stock Alert</label>
+              <label className="block text-sm font-medium text-gray-700 dark:text-gray-200 mb-2">Alerta de bajo stock</label>
               <input
                 type="number"
                 value={formData.lowStockThreshold}
@@ -105,13 +105,13 @@ export default function ProductFormModal({
 
           {/* Categories */}
           <div>
-            <label className="block text-sm font-medium text-gray-700 dark:text-gray-200 mb-2">Category</label>
+            <label className="block text-sm font-medium text-gray-700 dark:text-gray-200 mb-2">Categoría</label>
             <select
               value={formData.category1Id}
               onChange={(e) => setFormData({ ...formData, category1Id: e.target.value })}
               className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 mb-2"
             >
-              <option value="">Select Level 1</option>
+              <option value="">Selecciona nivel 1</option>
               {categories1.map((cat) => (
                 <option key={cat._id} value={cat._id}>{cat.name}</option>
               ))}
@@ -123,7 +123,7 @@ export default function ProductFormModal({
                 onChange={(e) => setFormData({ ...formData, category2Id: e.target.value })}
                 className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 mb-2"
               >
-                <option value="">Select Level 2</option>
+                <option value="">Selecciona nivel 2</option>
                 {categories2.map((cat) => (
                   <option key={cat._id} value={cat._id}>{cat.name}</option>
                 ))}
@@ -136,7 +136,7 @@ export default function ProductFormModal({
                 onChange={(e) => setFormData({ ...formData, category3Id: e.target.value })}
                 className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500"
               >
-                <option value="">Select Level 3</option>
+                <option value="">Selecciona nivel 3</option>
                 {categories3.map((cat) => (
                   <option key={cat._id} value={cat._id}>{cat.name}</option>
                 ))}
@@ -146,11 +146,11 @@ export default function ProductFormModal({
 
           {/* Images */}
           <div>
-            <label className="block text-sm font-medium text-gray-700 dark:text-gray-200 mb-2">Images *</label>
+            <label className="block text-sm font-medium text-gray-700 dark:text-gray-200 mb-2">Imágenes *</label>
             <CloudinaryUploadWidget
               onUploadSuccess={onImageUpload}
               folder="inventory/products"
-              buttonText="Upload Image"
+              buttonText="Subir imagen"
               multiple={true}
             />
 
@@ -170,7 +170,7 @@ export default function ProductFormModal({
                         onClick={() => onSetMainImage(index)}
                         className={`text-xs px-2 py-1 rounded ${img.isMain ? 'bg-blue-600 text-white' : 'bg-gray-200'}`}
                       >
-                        Main
+                        Principal
                       </button>
                       <button
                         type="button"
@@ -192,10 +192,10 @@ export default function ProductFormModal({
               onClick={onClose}
               className="px-4 py-2 border border-gray-300 text-gray-700 rounded-lg hover:bg-gray-50"
             >
-              Cancel
+              Cancelar
             </button>
             <button type="submit" className="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700">
-              {mode === 'add' ? 'Create' : 'Update'}
+              {mode === 'add' ? 'Crear' : 'Actualizar'}
             </button>
           </div>
         </form>

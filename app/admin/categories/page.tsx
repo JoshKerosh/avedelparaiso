@@ -39,7 +39,7 @@ export default function AdminCategoriesPage() {
       setCategories1(data.categories || []);
     } catch (error) {
       console.error('Error fetching categories:', error);
-      toast.error('Failed to load categories');
+      toast.error('No se pudieron cargar las categorías');
     } finally {
       setLoading(false);
     }
@@ -138,9 +138,9 @@ export default function AdminCategoriesPage() {
       const data = await response.json();
 
       if (response.ok) {
-        toast.success('Category created successfully!');
+        toast.success('¡Categoría creada con éxito!');
         closeModal();
-        
+
         // Refresh appropriate level
         if (selectedLevel === 1) {
           fetchLevel1Categories();
@@ -150,11 +150,11 @@ export default function AdminCategoriesPage() {
           fetchLevel3Categories(selectedParent);
         }
       } else {
-        toast.error(data.error || 'Failed to create category');
+        toast.error(data.error || 'No se pudo crear la categoría');
       }
     } catch (error) {
       console.error('Error creating category:', error);
-      toast.error('An error occurred');
+      toast.error('Ocurrió un error');
     }
   };
 
@@ -174,9 +174,9 @@ export default function AdminCategoriesPage() {
       const data = await response.json();
 
       if (response.ok) {
-        toast.success('Category updated successfully!');
+        toast.success('¡Categoría actualizada con éxito!');
         closeModal();
-        
+
         // Refresh appropriate level
         if (editingCategory.level === 1) {
           fetchLevel1Categories();
@@ -186,17 +186,16 @@ export default function AdminCategoriesPage() {
           fetchLevel3Categories(editingCategory.parentId);
         }
       } else {
-        toast.error(data.error || 'Failed to update category');
+        toast.error(data.error || 'No se pudo actualizar la categoría');
       }
     } catch (error) {
       console.error('Error updating category:', error);
-      toast.error('An error occurred');
+      toast.error('Ocurrió un error');
     }
   };
 
   const handleDelete = async (category: Category) => {
-    if (!confirm(`Are you sure you want to delete "${category.name}"?`)) return;
-    if (!window.confirm(`¿Estás seguro que quieres eliminar la categoría "${category.name}"? Esta acción no se puede deshacer.`)) return;
+    if (!window.confirm(`¿Seguro que quieres eliminar la categoría "${category.name}"? Esta acción no se puede deshacer.`)) return;
 
     try {
       const response = await fetch(`/api/admin/categories/${category._id}`, {
@@ -206,8 +205,8 @@ export default function AdminCategoriesPage() {
       const data = await response.json();
 
       if (response.ok) {
-        toast.success('Category deleted successfully!');
-        
+        toast.success('¡Categoría eliminada con éxito!');
+
         // Refresh appropriate level
         if (category.level === 1) {
           fetchLevel1Categories();
@@ -217,11 +216,11 @@ export default function AdminCategoriesPage() {
           fetchLevel3Categories(category.parentId);
         }
       } else {
-        toast.error(data.error || 'Failed to delete category');
+        toast.error(data.error || 'No se pudo eliminar la categoría');
       }
     } catch (error) {
       console.error('Error deleting category:', error);
-      toast.error('An error occurred');
+      toast.error('Ocurrió un error');
     }
   };
 
@@ -231,26 +230,26 @@ export default function AdminCategoriesPage() {
         <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
           <div className="mb-8 flex justify-between items-center">
             <div>
-              <h1 className="text-3xl font-bold text-gray-900 dark:text-gray-100">Categories</h1>
-              <p className="mt-2 text-gray-600 dark:text-gray-300">Organize your products with a 3-level hierarchy</p>
+              <h1 className="text-3xl font-bold text-gray-900 dark:text-gray-100">Categorías</h1>
+              <p className="mt-2 text-gray-600 dark:text-gray-300">Organiza tus productos con una jerarquía de 3 niveles</p>
             </div>
             <button
               onClick={() => openAddModal(1)}
               className="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors"
             >
-              Add Category
+              Agregar categoría
             </button>
           </div>
 
           {loading ? (
             <div className="text-center py-12">
-              <p className="text-gray-500">Loading categories...</p>
+              <p className="text-gray-500">Cargando categorías...</p>
             </div>
           ) : (
             <div className="bg-white dark:bg-gray-800 rounded-lg shadow">
               {categories1.length === 0 ? (
                 <div className="p-8 text-center">
-                  <p className="text-gray-500 dark:text-gray-400">No categories yet. Create your first category to get started.</p>
+                  <p className="text-gray-500 dark:text-gray-400">Aún no hay categorías. Crea tu primera categoría para empezar.</p>
                 </div>
               ) : (
                 <div className="divide-y divide-gray-200 dark:divide-gray-700">
@@ -277,21 +276,21 @@ export default function AdminCategoriesPage() {
                             <button
                               onClick={() => openAddModal(2, cat1._id)}
                               className="flex items-center justify-center w-7 h-7 text-base bg-green-600 dark:bg-green-500 text-white rounded-full hover:bg-green-700 dark:hover:bg-green-600"
-                              title="Add Subcategory"
+                              title="Agregar subcategoría"
                             >
                               +
                             </button>
                             <button
                               onClick={() => openEditModal(cat1)}
                               className="flex items-center justify-center w-7 h-7 text-base bg-gray-600 dark:bg-gray-500 text-white rounded-full hover:bg-gray-700 dark:hover:bg-gray-600 ml-1"
-                              title="Edit"
+                              title="Editar"
                             >
                               <FaPen size={12} />
                             </button>
                             <button
                               onClick={() => handleDelete(cat1)}
                               className="flex items-center justify-center w-7 h-7 text-base bg-red-600 dark:bg-red-500 text-white rounded-full hover:bg-red-700 dark:hover:bg-red-600 ml-1"
-                              title="Delete"
+                              title="Eliminar"
                             >
                               <FaTrash size={12} />
                             </button>
@@ -324,21 +323,21 @@ export default function AdminCategoriesPage() {
                                     <button
                                       onClick={() => openAddModal(3, cat2._id)}
                                       className="flex items-center justify-center w-7 h-7 text-base bg-green-600 text-white rounded-full hover:bg-green-700"
-                                      title="Add Subcategory"
+                                      title="Agregar subcategoría"
                                     >
                                       +
                                     </button>
                                     <button
                                       onClick={() => openEditModal(cat2)}
                                       className="flex items-center justify-center w-7 h-7 text-base bg-gray-600 text-white rounded-full hover:bg-gray-700 ml-1"
-                                      title="Edit"
+                                      title="Editar"
                                     >
                                       <FaPen size={12} />
                                     </button>
                                     <button
                                       onClick={() => handleDelete(cat2)}
                                       className="flex items-center justify-center w-7 h-7 text-base bg-red-600 text-white rounded-full hover:bg-red-700 ml-1"
-                                      title="Delete"
+                                      title="Eliminar"
                                     >
                                       <FaTrash size={12} />
                                     </button>
@@ -362,14 +361,14 @@ export default function AdminCategoriesPage() {
                                           <button
                                             onClick={() => openEditModal(cat3)}
                                             className="flex items-center justify-center w-7 h-7 text-base bg-gray-600 text-white rounded-full hover:bg-gray-700 ml-1"
-                                            title="Edit"
+                                            title="Editar"
                                           >
                                             <FaPen size={12} />
                                           </button>
                                           <button
                                             onClick={() => handleDelete(cat3)}
                                             className="flex items-center justify-center w-7 h-7 text-base bg-red-600 text-white rounded-full hover:bg-red-700 ml-1"
-                                            title="Delete"
+                                            title="Eliminar"
                                           >
                                             <FaTrash size={12} />
                                           </button>
@@ -378,14 +377,14 @@ export default function AdminCategoriesPage() {
                                     </div>
                                   ))}
                                   {categories3[cat2._id].length === 0 && (
-                                    <p className="p-4 text-sm text-gray-500 italic">No sub-subcategories</p>
+                                    <p className="p-4 text-sm text-gray-500 italic">No hay sub-subcategorías</p>
                                   )}
                                 </div>
                               )}
                             </div>
                           ))}
                           {categories2[cat1._id].length === 0 && (
-                            <p className="p-4 text-sm text-gray-500 italic">No subcategories</p>
+                            <p className="p-4 text-sm text-gray-500 italic">No hay subcategorías</p>
                           )}
                         </div>
                       )}
@@ -403,13 +402,13 @@ export default function AdminCategoriesPage() {
         <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
           <div className="bg-white rounded-lg p-6 w-full max-w-md">
             <h2 className="text-xl font-bold text-gray-900 mb-4">
-              {modalMode === 'add' ? 'Add Category' : 'Edit Category'}
+              {modalMode === 'add' ? 'Agregar categoría' : 'Editar categoría'}
             </h2>
 
             <form onSubmit={handleSubmit} className="space-y-4">
               <div>
                 <label className="block text-sm font-medium text-gray-700 mb-2">
-                  Category Name *
+                  Nombre de la categoría *
                 </label>
                 <input
                   type="text"
@@ -417,20 +416,20 @@ export default function AdminCategoriesPage() {
                   onChange={(e) => setFormData({ ...formData, name: e.target.value })}
                   required
                   className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-                  placeholder="Enter category name"
+                  placeholder="Ingresa el nombre de la categoría"
                 />
               </div>
 
               <div>
                 <label className="block text-sm font-medium text-gray-700 mb-2">
-                  Description (optional)
+                  Descripción (opcional)
                 </label>
                 <textarea
                   value={formData.description}
                   onChange={(e) => setFormData({ ...formData, description: e.target.value })}
                   rows={3}
                   className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-                  placeholder="Enter description"
+                  placeholder="Ingresa una descripción"
                 />
               </div>
 
@@ -440,13 +439,13 @@ export default function AdminCategoriesPage() {
                   onClick={closeModal}
                   className="px-4 py-2 border border-gray-300 text-gray-700 rounded-lg hover:bg-gray-50"
                 >
-                  Cancel
+                  Cancelar
                 </button>
                 <button
                   type="submit"
                   className="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700"
                 >
-                  {modalMode === 'add' ? 'Create' : 'Update'}
+                  {modalMode === 'add' ? 'Crear' : 'Actualizar'}
                 </button>
               </div>
             </form>
