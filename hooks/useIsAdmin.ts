@@ -1,8 +1,7 @@
 import { useSession } from 'next-auth/react';
 
+// There is no role concept in the auth model: any authenticated user is the admin.
 export function useIsAdmin() {
-  const { data: session } = useSession();
-  // Ajusta esto según tu modelo de usuario
-  // Por ejemplo, si session.user.role === 'admin'
-  return session?.user?.role === 'admin';
+  const { status } = useSession();
+  return status === 'authenticated';
 }

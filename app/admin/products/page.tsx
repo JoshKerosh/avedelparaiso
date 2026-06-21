@@ -1,32 +1,22 @@
+'use client';
+import { useState, useEffect } from 'react';
+import Image from 'next/image';
+import ProtectedRoute from '@/components/ProtectedRoute';
+import CloudinaryUploadWidget from '@/components/CloudinaryUploadWidget';
+import toast from 'react-hot-toast';
 
-  'use client';
-  import { useState, useEffect } from 'react';
-  import Image from 'next/image';
-  import ProtectedRoute from '@/components/ProtectedRoute';
-  import CloudinaryUploadWidget from '@/components/CloudinaryUploadWidget';
-  import toast from 'react-hot-toast';
-
-  interface Product {
-    _id: string;
-    name: string;
-    description: string;
-    price: number;
-    stock: number;
-    lowStockThreshold: number;
-    images: { url: string; publicId: string; isMain: boolean }[];
-    category1Id?: string;
-    category2Id?: string;
-    category3Id?: string;
-  }
-
-  interface Category {
-    _id: string;
-    name: string;
-    level: number;
-  }
-
-// ...existing code...
-
+interface Product {
+  _id: string;
+  name: string;
+  description: string;
+  price: number;
+  stock: number;
+  lowStockThreshold: number;
+  images: { url: string; publicId: string; isMain: boolean }[];
+  category1Id?: string;
+  category2Id?: string;
+  category3Id?: string;
+}
 
 interface Category {
   _id: string;
