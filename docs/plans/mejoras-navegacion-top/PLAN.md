@@ -13,10 +13,16 @@ introducir librerías nuevas.
 El usuario eligió: **alcance "Todo (top completo)"** e **idioma español** para toda la UI.
 
 ### Estado actual (importante)
-- `components/Navigation.tsx` **ya fue sobrescrito** con una primera versión que cubre la
-  mayoría de los puntos (ocultar Admin, logout, página activa, español, buscador, menú
-  móvil con `aria-expanded` y cierre en cambio de ruta, brand mark). En la fase de
-  implementación se **revisa y refina** esa versión, no se parte de cero.
+- Rama de trabajo: **`feature/mejoras-navegacion-top`** (creada desde `master`).
+- `components/Navigation.tsx` está en su **estado original** (un intento previo de edición no
+  se conservó al cambiar de rama). Se implementa desde cero en la Fase 1.
+- El plan se divide en **4 fases**, cada una con su archivo y task list, más `PROGRESS.md`
+  para llevar la continuidad:
+  - `FASE-1-navbar-layout-footer.md`
+  - `FASE-2-catalogo-filtros.md`
+  - `FASE-3-detalle-tarjetas-home.md`
+  - `FASE-4-idioma-estados-admin.md`
+  - `PROGRESS.md`
 - Hallazgo: el catálogo público (`ProductFilters.tsx`) consume
   `/api/admin/categories/children/[parentId]`, que **no** tiene guard de auth, por lo que
   funciona para visitantes. Se deja funcionando, pero se documenta como deuda menor
@@ -25,8 +31,8 @@ El usuario eligió: **alcance "Todo (top completo)"** e **idioma español** para
 
 ## Alcance y cambios por archivo
 
-### 1. Navbar — `components/Navigation.tsx` (ya aplicado, refinar)
-Confirmar/ajustar:
+### 1. Navbar — `components/Navigation.tsx` (implementar desde cero)
+Implementar:
 - `Admin` solo visible si `status === 'authenticated'` (lista `LINKS` filtrada por `adminOnly`).
 - Botón **Cerrar sesión** con `signOut({ callbackUrl: '/' })` (desktop + móvil).
 - Página activa con `usePathname()` + `aria-current="page"` (subraya/resalta).
