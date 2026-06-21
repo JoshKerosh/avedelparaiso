@@ -1,16 +1,17 @@
 import { config } from 'dotenv';
 import { resolve } from 'path';
 
-// Load .env.local FIRST before any other imports
+// Load .env.local FIRST. Static imports are hoisted above this call, so any module
+// that reads env at load time (e.g. lib/mongodb.ts, which throws on a missing
+// MONGODB_URI) must be imported dynamically below — after env is populated.
 config({ path: resolve(process.cwd(), '.env.local') });
 
-import mongoose from 'mongoose';
-import bcrypt from 'bcryptjs';
-import connectDB from '../lib/mongodb';
-import User from '../models/User';
-import Settings from '../models/Settings';
-
 async function seed() {
+  const { default: bcrypt } = await import('bcryptjs');
+  const { default: connectDB } = await import('../lib/mongodb');
+  const { default: User } = await import('../models/User');
+  const { default: Settings } = await import('../models/Settings');
+
   try {
     console.log('Connecting to MongoDB...');
     await connectDB();

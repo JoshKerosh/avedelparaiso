@@ -1,0 +1,34 @@
+- generic [active] [ref=e1]:
+  - navigation [ref=e2]:
+    - generic [ref=e4]:
+      - link "Ave del Paraíso" [ref=e6] [cursor=pointer]:
+        - /url: /
+      - generic [ref=e7]:
+        - link "Home" [ref=e8] [cursor=pointer]:
+          - /url: /
+        - link "Products" [ref=e9] [cursor=pointer]:
+          - /url: /products
+        - link "Admin" [ref=e10] [cursor=pointer]:
+          - /url: /admin
+        - button "Toggle theme" [ref=e17] [cursor=pointer]:
+          - img [ref=e12]
+  - main [ref=e14]:
+    - generic [ref=e35]:
+      - heading "Admin Login" [level=1] [ref=e36]
+      - generic [ref=e37]:
+        - generic [ref=e38]:
+          - generic [ref=e39]: Username
+          - textbox "Username" [ref=e40]:
+            - /placeholder: Enter username
+            - text: admin
+        - generic [ref=e41]:
+          - generic [ref=e42]: Password
+          - textbox "Password" [ref=e43]:
+            - /placeholder: Enter password
+            - text: admin
+        - button "Login" [ref=e44] [cursor=pointer]
+      - paragraph [ref=e45]: "Default credentials: admin / admin"
+  - status [ref=e51]: querySrv ENOTFOUND _mongodb._tcp.mymongodb.hteve5f.mongodb.net
+  - button "Open Next.js Dev Tools" [ref=e29] [cursor=pointer]:
+    - img [ref=e30]
+  - alert [ref=e33]: Admin Login
