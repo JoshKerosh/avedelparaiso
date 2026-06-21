@@ -13,7 +13,7 @@ commits y dejar el "siguiente paso" claro para retomar sin contexto previo.
 |------|---------|--------|--------|
 | 1 — Navbar + layout + footer | [FASE-1](./FASE-1-navbar-layout-footer.md) | ✅ Completada | `b9c8cb2` |
 | 2 — Catálogo + filtros | [FASE-2](./FASE-2-catalogo-filtros.md) | ✅ Completada | `912053b` |
-| 3 — Detalle + tarjetas + home | [FASE-3](./FASE-3-detalle-tarjetas-home.md) | ⬜ Pendiente | — |
+| 3 — Detalle + tarjetas + home | [FASE-3](./FASE-3-detalle-tarjetas-home.md) | ✅ Completada | `234f31f` |
 | 4 — Idioma: estados + admin | [FASE-4](./FASE-4-idioma-estados-admin.md) | ⬜ Pendiente | — |
 
 > Leyenda: ⬜ Pendiente · 🟡 En progreso · ✅ Completada · ⏸️ Bloqueada
@@ -68,3 +68,18 @@ commits y dejar el "siguiente paso" claro para retomar sin contexto previo.
 - Gaps: ninguno nuevo. (Tarjeta sigue mostrando "Low Stock"/"in stock" → Fase 3.)
 - Commit: `912053b`
 - Siguiente paso: **Fase 3** (detalle + tarjetas + home).
+
+### 2026-06-21 — Fase 3 (Detalle + tarjetas + home) ✅
+- Hecho:
+  - `app/products/[id]/page.tsx`: categorías clicables en breadcrumb y sección "Categoría"
+    (enlazan a `/products?categoryN=<id>` con sus padres); textos en español; singular/plural
+    en "unidad(es) en stock".
+  - `lib/product-ui.ts`: estados → Agotado / Pocas unidades / Disponible (+ test actualizado).
+  - `components/ProductCard.tsx`: "N disponibles". `app/page.tsx`: home en español.
+- Verificación: lint 0 errores, build OK, 25 tests OK.
+  Runtime (Playwright): breadcrumb Inicio/Productos/Accesorios/Anillos clicable; clic en
+  "Accesorios" navega a `/products?category1=...`, filtra a 2 productos y muestra chip;
+  badges "Pocas unidades"/"Disponible" y home en español; 0 errores de consola.
+- Gaps: ninguno nuevo (el ajuste singular/plural se resolvió en la misma fase).
+- Commit: `234f31f`
+- Siguiente paso: **Fase 4** (idioma: estados + admin).
