@@ -1,83 +1,51 @@
-'use client';
-
-import { useEffect, useState } from 'react';
-import { useParams } from 'next/navigation';
 import Link from 'next/link';
+import { notFound } from 'next/navigation';
+import type { Metadata } from 'next';
 import ImageCarousel from '@/components/ImageCarousel';
+import { getProductById } from '@/lib/products';
+import { getMainImage, getStockStatus } from '@/lib/product-ui';
 
-interface Product {
-  _id: string;
-  name: string;
-  description: string;
-  price: number;
-  stock: number;
-  lowStockThreshold: number;
-  images: { url: string; isMain: boolean }[];
-  category1Id?: { _id: string; name: string };
-  category2Id?: { _id: string; name: string };
-  category3Id?: { _id: string; name: string };
+export async function generateMetadata({
+  params,
+}: {
+  params: Promise<{ id: string }>;
+}): Promise<Metadata> {
+  const { id } = await params;
+  const product = await getProductById(id);
+  if (!product) {
+    return { title: 'Producto no encontrado — Ave del Paraíso' };
+  }
+  const image = getMainImage(product);
+  return {
+    title: `${product.name} — Ave del Paraíso`,
+    description: product.description?.slice(0, 160),
+    openGraph: {
+      title: product.name,
+      description: product.description?.slice(0, 160),
+      images: image !== '/placeholder.jpg' ? [image] : [],
+    },
+  };
 }
 
-export default function ProductDetailPage() {
-  const params = useParams();
-  const [product, setProduct] = useState<Product | null>(null);
-  const [loading, setLoading] = useState(true);
-
-  useEffect(() => {
-    if (params.id) {
-      fetchProduct(params.id as string);
-    }
-  }, [params.id]);
-
-  const fetchProduct = async (id: string) => {
-    try {
-      const response = await fetch(`/api/products/${id}`);
-      if (response.ok) {
-        const data = await response.json();
-        setProduct(data.product);
-      }
-    } catch (error) {
-      console.error('Error fetching product:', error);
-    } finally {
-      setLoading(false);
-    }
-  };
-
-  if (loading) {
-    return (
-      <div className="min-h-screen bg-gray-50 dark:bg-gray-900 flex items-center justify-center">
-        <p className="text-gray-500 dark:text-gray-400">Loading product...</p>
-      </div>
-    );
-  }
+export default async function ProductDetailPage({
+  params,
+}: {
+  params: Promise<{ id: string }>;
+}) {
+  const { id } = await params;
+  const product = await getProductById(id);
 
   if (!product) {
-    return (
-      <div className="min-h-screen bg-gray-50 dark:bg-gray-900 flex items-center justify-center">
-        <div className="text-center">
-          <p className="text-gray-500 dark:text-gray-400 mb-4">Product not found</p>
-          <Link href="/products" className="text-blue-600 dark:text-blue-400 hover:text-blue-700 dark:hover:text-blue-300">
-            Back to Products
-          </Link>
-        </div>
-      </div>
-    );
+    notFound();
   }
 
-  const getStockStatus = () => {
-    if (product.stock === 0) return { text: 'Out of Stock', color: 'bg-red-100 text-red-800' };
-    if (product.stock <= product.lowStockThreshold)
-      return { text: 'Low Stock', color: 'bg-yellow-100 text-yellow-800' };
-    return { text: 'In Stock', color: 'bg-green-100 text-green-800' };
-  };
-
-  const status = getStockStatus();
+  const status = getStockStatus(product);
 
   return (
     <div className="min-h-screen bg-gray-50 dark:bg-gray-900">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
         {/* Breadcrumb */}
-        <nav className="mb-8 flex items-center space-x-2 text-sm text-gray-600 dark:text-gray-400">
+        <nav className="mb-8 flex items-center flex-wrap gap-2 text-sm text-gray-600 dark:text-gray-400">
           <Link href="/" className="hover:text-gray-900 dark:hover:text-white">
             Home
           </Link>

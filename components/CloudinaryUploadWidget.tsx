@@ -1,6 +1,7 @@
 'use client';
 
 import { useEffect, useRef, useState } from 'react';
+import toast from 'react-hot-toast';
 
 interface CloudinaryUploadWidgetProps {
   onUploadSuccess: (result: { url: string; publicId: string }) => void;
@@ -9,9 +10,31 @@ interface CloudinaryUploadWidgetProps {
   multiple?: boolean;
 }
 
+interface CloudinaryWidget {
+  open: () => void;
+  close: () => void;
+}
+
+interface CloudinaryWidgetError {
+  statusText?: string;
+  message?: string;
+}
+
+interface CloudinaryWidgetResult {
+  event?: string;
+  info?: { secure_url: string; public_id: string };
+}
+
+interface CloudinaryGlobal {
+  createUploadWidget: (
+    options: Record<string, unknown>,
+    callback: (error: CloudinaryWidgetError | null, result: CloudinaryWidgetResult) => void
+  ) => CloudinaryWidget;
+}
+
 declare global {
   interface Window {
-    cloudinary: any;
+    cloudinary?: CloudinaryGlobal;
   }
 }
 
@@ -21,21 +44,19 @@ export default function CloudinaryUploadWidget({
   buttonText = 'Upload Image',
   multiple = false,
 }: CloudinaryUploadWidgetProps) {
-  const widgetRef = useRef<any>(null);
+  const widgetRef = useRef<CloudinaryWidget | null>(null);
   const [scriptLoaded, setScriptLoaded] = useState(false);
   const cloudName = process.env.NEXT_PUBLIC_CLOUDINARY_CLOUD_NAME;
   const uploadPreset = process.env.NEXT_PUBLIC_CLOUDINARY_UPLOAD_PRESET;
 
   useEffect(() => {
-    // Check if script already exists
     const existingScript = document.getElementById('cloudinary-upload-widget');
-    
+
     if (existingScript) {
       setScriptLoaded(true);
       return;
     }
 
-    // Load Cloudinary widget script
     const script = document.createElement('script');
     script.id = 'cloudinary-upload-widget';
     script.src = 'https://upload-widget.cloudinary.com/global/all.js';
@@ -45,12 +66,11 @@ export default function CloudinaryUploadWidget({
     };
     script.onerror = () => {
       console.error('Failed to load Cloudinary widget script');
-      alert('Failed to load upload widget. Please refresh the page.');
+      toast.error('Failed to load upload widget. Please refresh the page.');
     };
     document.body.appendChild(script);
 
     return () => {
-      // Cleanup if component unmounts
       if (widgetRef.current) {
         widgetRef.current.close();
       }
@@ -59,17 +79,17 @@ export default function CloudinaryUploadWidget({
 
   const openWidget = () => {
     if (!scriptLoaded || !window.cloudinary) {
-      alert('Cloudinary widget is still loading. Please wait a moment and try again.');
+      toast.error('Upload widget is still loading. Please wait a moment and try again.');
       return;
     }
 
     if (!cloudName) {
-      alert('Cloudinary cloud name is not configured. Please set NEXT_PUBLIC_CLOUDINARY_CLOUD_NAME in .env.local');
+      toast.error('Cloudinary cloud name is not configured (NEXT_PUBLIC_CLOUDINARY_CLOUD_NAME).');
       return;
     }
 
     if (!uploadPreset) {
-      alert('Cloudinary upload preset is not configured. Please set NEXT_PUBLIC_CLOUDINARY_UPLOAD_PRESET in .env.local');
+      toast.error('Cloudinary upload preset is not configured (NEXT_PUBLIC_CLOUDINARY_UPLOAD_PRESET).');
       return;
     }
 
@@ -77,9 +97,10 @@ export default function CloudinaryUploadWidget({
       if (!widgetRef.current) {
         widgetRef.current = window.cloudinary.createUploadWidget(
           {
-            cloudName: cloudName,
-            uploadPreset: uploadPreset,
-            multiple: multiple,
+            cloudName,
+            uploadPreset,
+            folder,
+            multiple,
             maxFiles: multiple ? 10 : 1,
             sources: ['local', 'url'],
             resourceType: 'image',
@@ -88,15 +109,14 @@ export default function CloudinaryUploadWidget({
             showSkipCropButton: false,
             cropping: false,
           },
-          (error: any, result: any) => {
+          (error, result) => {
             if (error) {
               console.error('Upload error:', error);
-              alert(`Upload failed: ${error.statusText || error.message || 'Unknown error'}`);
+              toast.error(`Upload failed: ${error.statusText || error.message || 'Unknown error'}`);
               return;
             }
 
-            if (result.event === 'success') {
-              console.log('Upload successful:', result.info);
+            if (result.event === 'success' && result.info) {
               onUploadSuccess({
                 url: result.info.secure_url,
                 publicId: result.info.public_id,
@@ -107,9 +127,10 @@ export default function CloudinaryUploadWidget({
       }
 
       widgetRef.current.open();
-    } catch (err: any) {
+    } catch (err) {
       console.error('Widget error:', err);
-      alert(`Failed to open upload widget: ${err.message}`);
+      const message = err instanceof Error ? err.message : 'Unknown error';
+      toast.error(`Failed to open upload widget: ${message}`);
     }
   };
 

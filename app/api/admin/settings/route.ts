@@ -4,8 +4,9 @@ import { authOptions } from '@/app/api/auth/[...nextauth]/route';
 import connectDB from '@/lib/mongodb';
 import Settings from '@/models/Settings';
 import cloudinary from '@/lib/cloudinary';
+import { handleApiError } from '@/lib/apiError';
 
-export async function GET(request: NextRequest) {
+export async function GET() {
   try {
     await connectDB();
 
@@ -20,9 +21,8 @@ export async function GET(request: NextRequest) {
     }
 
     return NextResponse.json({ settings });
-  } catch (error: any) {
-    console.error('Error fetching settings:', error);
-    return NextResponse.json({ error: error.message }, { status: 500 });
+  } catch (error) {
+    return handleApiError(error);
   }
 }
 
@@ -62,8 +62,7 @@ export async function PUT(request: NextRequest) {
     }
 
     return NextResponse.json({ settings });
-  } catch (error: any) {
-    console.error('Error updating settings:', error);
-    return NextResponse.json({ error: error.message }, { status: 500 });
+  } catch (error) {
+    return handleApiError(error);
   }
 }

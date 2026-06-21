@@ -3,6 +3,7 @@ import { getServerSession } from 'next-auth';
 import { authOptions } from '@/app/api/auth/[...nextauth]/route';
 import connectDB from '@/lib/mongodb';
 import StockHistory from '@/models/StockHistory';
+import { handleApiError } from '@/lib/apiError';
 
 export async function GET(
   request: NextRequest,
@@ -24,8 +25,7 @@ export async function GET(
       .lean();
 
     return NextResponse.json({ history });
-  } catch (error: any) {
-    console.error('Error fetching stock history:', error);
-    return NextResponse.json({ error: error.message }, { status: 500 });
+  } catch (error) {
+    return handleApiError(error);
   }
 }

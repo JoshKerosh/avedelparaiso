@@ -1,5 +1,6 @@
 'use client';
 
+import { Suspense } from 'react';
 import { SessionProvider } from 'next-auth/react';
 import { Toaster } from 'react-hot-toast';
 import { ThemeProvider } from '@/components/ThemeProvider';
@@ -16,7 +17,9 @@ export default function RootLayout({
       <body className="min-h-screen bg-gray-50 dark:bg-gray-900 transition-colors">
         <ThemeProvider>
           <SessionProvider>
-            <Navigation />
+            <Suspense fallback={null}>
+              <Navigation />
+            </Suspense>
             <main>{children}</main>
             <Toaster position="top-right" />
           </SessionProvider>

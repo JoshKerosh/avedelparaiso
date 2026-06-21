@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server';
 import connectDB from '@/lib/mongodb';
 import Category from '@/models/Category';
+import { handleApiError } from '@/lib/apiError';
 
 export async function GET(
   request: NextRequest,
@@ -15,8 +16,7 @@ export async function GET(
       .lean();
 
     return NextResponse.json({ categories });
-  } catch (error: any) {
-    console.error('Error fetching child categories:', error);
-    return NextResponse.json({ error: error.message }, { status: 500 });
+  } catch (error) {
+    return handleApiError(error);
   }
 }

@@ -3,6 +3,8 @@ import { getServerSession } from 'next-auth';
 import { authOptions } from '@/app/api/auth/[...nextauth]/route';
 import connectDB from '@/lib/mongodb';
 import Category from '@/models/Category';
+import { handleApiError } from '@/lib/apiError';
+import { categoryInputSchema, firstZodError } from '@/lib/validation';
 
 export async function GET(request: NextRequest) {
   try {
@@ -12,8 +14,8 @@ export async function GET(request: NextRequest) {
     const level = searchParams.get('level');
     const parentId = searchParams.get('parentId');
 
-    const query: any = {};
-    
+    const query: Record<string, unknown> = {};
+
     if (level) {
       query.level = parseInt(level);
     }
@@ -29,9 +31,8 @@ export async function GET(request: NextRequest) {
       .lean();
 
     return NextResponse.json({ categories });
-  } catch (error: any) {
-    console.error('Error fetching categories:', error);
-    return NextResponse.json({ error: error.message }, { status: 500 });
+  } catch (error) {
+    return handleApiError(error);
   }
 }
 
@@ -45,7 +46,11 @@ export async function POST(request: NextRequest) {
     await connectDB();
 
     const body = await request.json();
-    const { name, description, parentId, level } = body;
+    const parsed = categoryInputSchema.safeParse(body);
+    if (!parsed.success) {
+      return NextResponse.json({ error: firstZodError(parsed.error) }, { status: 400 });
+    }
+    const { name, description, parentId, level } = parsed.data;
 
     // Validate level matches parent
     if (level === 1 && parentId) {
@@ -58,7 +63,7 @@ export async function POST(request: NextRequest) {
 
     // Check for unique name within same parent
     const existingCategory = await Category.findOne({
-      name: name.trim(),
+      name,
       parentId: parentId || null,
     });
 
@@ -67,15 +72,14 @@ export async function POST(request: NextRequest) {
     }
 
     const category = await Category.create({
-      name: name.trim(),
+      name,
       description,
       parentId: parentId || null,
       level,
     });
 
     return NextResponse.json({ category }, { status: 201 });
-  } catch (error: any) {
-    console.error('Error creating category:', error);
-    return NextResponse.json({ error: error.message }, { status: 500 });
+  } catch (error) {
+    return handleApiError(error);
   }
 }

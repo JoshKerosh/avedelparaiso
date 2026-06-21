@@ -4,6 +4,8 @@ import { authOptions } from '@/app/api/auth/[...nextauth]/route';
 import connectDB from '@/lib/mongodb';
 import Product from '@/models/Product';
 import cloudinary from '@/lib/cloudinary';
+import { handleApiError } from '@/lib/apiError';
+import { productInputSchema, firstZodError } from '@/lib/validation';
 
 export async function GET(
   request: NextRequest,
@@ -27,9 +29,8 @@ export async function GET(
     }
 
     return NextResponse.json({ product });
-  } catch (error: any) {
-    console.error('Error fetching product:', error);
-    return NextResponse.json({ error: error.message }, { status: 500 });
+  } catch (error) {
+    return handleApiError(error);
   }
 }
 
@@ -46,15 +47,16 @@ export async function PUT(
     await connectDB();
     const { id } = await params;
     const body = await request.json();
-
-    const { name, description, price, stock, lowStockThreshold, images, category1Id, category2Id, category3Id } = body;
+    const parsed = productInputSchema.safeParse(body);
+    if (!parsed.success) {
+      return NextResponse.json({ error: firstZodError(parsed.error) }, { status: 400 });
+    }
+    const { name, description, price, stock, lowStockThreshold, images, category1Id, category2Id, category3Id } = parsed.data;
 
     // Ensure at least one image is marked as main
-    if (images && images.length > 0) {
-      const hasMain = images.some((img: any) => img.isMain);
-      if (!hasMain) {
-        images[0].isMain = true;
-      }
+    const imagesList = images ?? [];
+    if (imagesList.length > 0 && !imagesList.some((img) => img.isMain)) {
+      imagesList[0].isMain = true;
     }
 
     const product = await Product.findByIdAndUpdate(
@@ -64,8 +66,8 @@ export async function PUT(
         description,
         price,
         stock,
-        lowStockThreshold,
-        images,
+        lowStockThreshold: lowStockThreshold ?? 10,
+        images: imagesList,
         category1Id: category1Id || null,
         category2Id: category2Id || null,
         category3Id: category3Id || null,
@@ -78,9 +80,8 @@ export async function PUT(
     }
 
     return NextResponse.json({ product });
-  } catch (error: any) {
-    console.error('Error updating product:', error);
-    return NextResponse.json({ error: error.message }, { status: 500 });
+  } catch (error) {
+    return handleApiError(error);
   }
 }
 
@@ -117,8 +118,7 @@ export async function DELETE(
     await Product.findByIdAndDelete(id);
 
     return NextResponse.json({ message: 'Product deleted successfully' });
-  } catch (error: any) {
-    console.error('Error deleting product:', error);
-    return NextResponse.json({ error: error.message }, { status: 500 });
+  } catch (error) {
+    return handleApiError(error);
   }
 }

@@ -4,6 +4,8 @@ import { authOptions } from '@/app/api/auth/[...nextauth]/route';
 import connectDB from '@/lib/mongodb';
 import Category from '@/models/Category';
 import Product from '@/models/Product';
+import { handleApiError } from '@/lib/apiError';
+import { categoryUpdateSchema, firstZodError } from '@/lib/validation';
 
 export async function GET(
   request: NextRequest,
@@ -25,9 +27,8 @@ export async function GET(
     }
 
     return NextResponse.json({ category });
-  } catch (error: any) {
-    console.error('Error fetching category:', error);
-    return NextResponse.json({ error: error.message }, { status: 500 });
+  } catch (error) {
+    return handleApiError(error);
   }
 }
 
@@ -44,7 +45,11 @@ export async function PUT(
     await connectDB();
     const { id } = await params;
     const body = await request.json();
-    const { name, description } = body;
+    const parsed = categoryUpdateSchema.safeParse(body);
+    if (!parsed.success) {
+      return NextResponse.json({ error: firstZodError(parsed.error) }, { status: 400 });
+    }
+    const { name, description } = parsed.data;
 
     const currentCategory = await Category.findById(id);
     if (!currentCategory) {
@@ -54,7 +59,7 @@ export async function PUT(
     // Check for unique name within same parent (excluding current category)
     const existingCategory = await Category.findOne({
       _id: { $ne: id },
-      name: name.trim(),
+      name,
       parentId: currentCategory.parentId,
     });
 
@@ -64,14 +69,13 @@ export async function PUT(
 
     const category = await Category.findByIdAndUpdate(
       id,
-      { name: name.trim(), description },
+      { name, description },
       { new: true, runValidators: true }
     );
 
     return NextResponse.json({ category });
-  } catch (error: any) {
-    console.error('Error updating category:', error);
-    return NextResponse.json({ error: error.message }, { status: 500 });
+  } catch (error) {
+    return handleApiError(error);
   }
 }
 
@@ -117,8 +121,7 @@ export async function DELETE(
     await Category.findByIdAndDelete(id);
 
     return NextResponse.json({ message: 'Category deleted successfully' });
-  } catch (error: any) {
-    console.error('Error deleting category:', error);
-    return NextResponse.json({ error: error.message }, { status: 500 });
+  } catch (error) {
+    return handleApiError(error);
   }
 }
