@@ -14,10 +14,10 @@ export interface StockStatus {
 /** Maps stock level to a label + Tailwind badge classes. */
 export function getStockStatus(product: { stock: number; lowStockThreshold: number }): StockStatus {
   if (product.stock === 0) {
-    return { text: 'Out of Stock', color: 'bg-red-100 text-red-800' };
+    return { text: 'Agotado', color: 'bg-red-100 text-red-800' };
   }
   if (product.stock <= product.lowStockThreshold) {
-    return { text: 'Low Stock', color: 'bg-yellow-100 text-yellow-800' };
+    return { text: 'Pocas unidades', color: 'bg-yellow-100 text-yellow-800' };
   }
-  return { text: 'In Stock', color: 'bg-green-100 text-green-800' };
+  return { text: 'Disponible', color: 'bg-green-100 text-green-800' };
 }

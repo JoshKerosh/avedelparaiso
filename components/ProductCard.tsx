@@ -35,7 +35,7 @@ export default function ProductCard({ product }: { product: ProductListItem }) {
           <span className={`text-xs px-2 py-1 rounded ${status.color}`}>{status.text}</span>
         </div>
         {product.stock > 0 && (
-          <p className="text-sm text-gray-600 dark:text-gray-400">{product.stock} in stock</p>
+          <p className="text-sm text-gray-600 dark:text-gray-400">{product.stock} disponibles</p>
         )}
       </div>
     </Link>
