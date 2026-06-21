@@ -3,13 +3,11 @@
 import Link from 'next/link';
 import ThemeToggle from './ThemeToggle';
 import { useSession } from 'next-auth/react';
-import { useIsAdmin } from '@/hooks/useIsAdmin';
 import { useState } from 'react';
 
 export default function Navigation() {
   const [isOpen, setIsOpen] = useState(false);
   const { status } = useSession();
-  const isAdmin = useIsAdmin();
 
   return (
     <nav className="bg-white dark:bg-gray-800 shadow-sm border-b border-gray-200 dark:border-gray-700 sticky top-0 z-50">
