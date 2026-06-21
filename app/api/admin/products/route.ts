@@ -3,8 +3,10 @@ import { getServerSession } from 'next-auth';
 import { authOptions } from '@/app/api/auth/[...nextauth]/route';
 import connectDB from '@/lib/mongodb';
 import Product from '@/models/Product';
+import { handleApiError } from '@/lib/apiError';
+import { productInputSchema, firstZodError } from '@/lib/validation';
 
-export async function GET(request: NextRequest) {
+export async function GET() {
   try {
     const session = await getServerSession(authOptions);
     if (!session) {
@@ -19,9 +21,8 @@ export async function GET(request: NextRequest) {
       .lean();
 
     return NextResponse.json({ products });
-  } catch (error: any) {
-    console.error('Error fetching products:', error);
-    return NextResponse.json({ error: error.message }, { status: 500 });
+  } catch (error) {
+    return handleApiError(error);
   }
 }
 
@@ -35,14 +36,16 @@ export async function POST(request: NextRequest) {
     await connectDB();
 
     const body = await request.json();
-    const { name, description, price, stock, lowStockThreshold, images, category1Id, category2Id, category3Id } = body;
+    const parsed = productInputSchema.safeParse(body);
+    if (!parsed.success) {
+      return NextResponse.json({ error: firstZodError(parsed.error) }, { status: 400 });
+    }
+    const { name, description, price, stock, lowStockThreshold, images, category1Id, category2Id, category3Id } = parsed.data;
 
     // Ensure at least one image is marked as main
-    if (images && images.length > 0) {
-      const hasMain = images.some((img: any) => img.isMain);
-      if (!hasMain) {
-        images[0].isMain = true;
-      }
+    const imagesList = images ?? [];
+    if (imagesList.length > 0 && !imagesList.some((img) => img.isMain)) {
+      imagesList[0].isMain = true;
     }
 
     const product = await Product.create({
@@ -50,16 +53,15 @@ export async function POST(request: NextRequest) {
       description,
       price,
       stock,
-      lowStockThreshold: lowStockThreshold || 10,
-      images,
+      lowStockThreshold: lowStockThreshold ?? 10,
+      images: imagesList,
       category1Id: category1Id || null,
       category2Id: category2Id || null,
       category3Id: category3Id || null,
     });
 
     return NextResponse.json({ product }, { status: 201 });
-  } catch (error: any) {
-    console.error('Error creating product:', error);
-    return NextResponse.json({ error: error.message }, { status: 500 });
+  } catch (error) {
+    return handleApiError(error);
   }
 }

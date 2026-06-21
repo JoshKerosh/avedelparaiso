@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server';
 import connectDB from '@/lib/mongodb';
 import Product from '@/models/Product';
+import { handleApiError } from '@/lib/apiError';
 
 export async function GET(
   request: NextRequest,
@@ -19,8 +20,7 @@ export async function GET(
     }
 
     return NextResponse.json({ product });
-  } catch (error: any) {
-    console.error('Error fetching product:', error);
-    return NextResponse.json({ error: error.message }, { status: 500 });
+  } catch (error) {
+    return handleApiError(error);
   }
 }

@@ -3,6 +3,7 @@ import CredentialsProvider from 'next-auth/providers/credentials';
 import bcrypt from 'bcryptjs';
 import connectDB from '@/lib/mongodb';
 import User from '@/models/User';
+import { rateLimit, getClientIp } from '@/lib/rateLimit';
 
 export const authOptions: NextAuthOptions = {
   providers: [
@@ -12,9 +13,18 @@ export const authOptions: NextAuthOptions = {
         username: { label: 'Username', type: 'text' },
         password: { label: 'Password', type: 'password' },
       },
-      async authorize(credentials) {
+      async authorize(credentials, req) {
         if (!credentials?.username || !credentials?.password) {
           throw new Error('Please enter username and password');
+        }
+
+        // Throttle login attempts per IP to slow down brute-force.
+        const ip = getClientIp({
+          get: (name: string) => req?.headers?.[name] ?? null,
+        });
+        const limit = rateLimit(`login:${ip}`, 10, 60_000);
+        if (!limit.allowed) {
+          throw new Error('Too many login attempts. Please try again later.');
         }
 
         await connectDB();

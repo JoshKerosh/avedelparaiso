@@ -1,11 +1,12 @@
-import { NextRequest, NextResponse } from 'next/server';
+import { NextResponse } from 'next/server';
 import { getServerSession } from 'next-auth';
 import { authOptions } from '@/app/api/auth/[...nextauth]/route';
 import connectDB from '@/lib/mongodb';
 import Product from '@/models/Product';
 import StockHistory from '@/models/StockHistory';
+import { handleApiError } from '@/lib/apiError';
 
-export async function GET(request: NextRequest) {
+export async function GET() {
   try {
     const session = await getServerSession(authOptions);
     if (!session) {
@@ -46,8 +47,7 @@ export async function GET(request: NextRequest) {
       outOfStockProducts,
       recentStockChanges,
     });
-  } catch (error: any) {
-    console.error('Error fetching dashboard data:', error);
-    return NextResponse.json({ error: error.message }, { status: 500 });
+  } catch (error) {
+    return handleApiError(error);
   }
 }

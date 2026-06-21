@@ -1,102 +1,25 @@
 import { NextRequest, NextResponse } from 'next/server';
-import connectDB from '@/lib/mongodb';
-import Product from '@/models/Product';
-import Category from '@/models/Category';
+import { getProducts } from '@/lib/products';
+import { handleApiError } from '@/lib/apiError';
 
 export async function GET(request: NextRequest) {
   try {
-    await connectDB();
-
     const { searchParams } = new URL(request.url);
-    const search = searchParams.get('search') || '';
-    const category1 = searchParams.get('category1');
-    const category2 = searchParams.get('category2');
-    const category3 = searchParams.get('category3');
-    const sort = searchParams.get('sort') || 'newest';
+    const page = Math.max(1, parseInt(searchParams.get('page') ?? '1', 10) || 1);
+    const limitParam = parseInt(searchParams.get('limit') ?? '', 10);
 
-    // Build query
-    const query: any = {};
+    const result = await getProducts({
+      search: searchParams.get('search') ?? undefined,
+      category1: searchParams.get('category1') ?? undefined,
+      category2: searchParams.get('category2') ?? undefined,
+      category3: searchParams.get('category3') ?? undefined,
+      sort: searchParams.get('sort') ?? undefined,
+      page,
+      limit: Number.isFinite(limitParam) && limitParam > 0 ? limitParam : undefined,
+    });
 
-    if (search) {
-      query.$or = [
-        { name: { $regex: search, $options: 'i' } },
-        { description: { $regex: search, $options: 'i' } }
-      ];
-    }
-
-    // Category filtering with level + children logic
-    if (category3) {
-      if (search) {
-        query.$and = [
-          { $or: query.$or },
-          { category3Id: category3 }
-        ];
-        delete query.$or;
-      } else {
-        query.category3Id = category3;
-      }
-    } else if (category2) {
-      // Get all level 3 categories under this level 2
-      const level3Categories = await Category.find({ parentId: category2, level: 3 });
-      const level3Ids = level3Categories.map(cat => cat._id);
-      
-      const categoryCondition = {
-        $or: [
-          { category2Id: category2, category3Id: null },
-          { category3Id: { $in: level3Ids } }
-        ]
-      };
-
-      if (search) {
-        query.$and = [
-          { $or: query.$or },
-          categoryCondition
-        ];
-        delete query.$or;
-      } else {
-        query.$or = categoryCondition.$or;
-      }
-    } else if (category1) {
-      // Get all level 2 and 3 categories under this level 1
-      const level2Categories = await Category.find({ parentId: category1, level: 2 });
-      const level2Ids = level2Categories.map(cat => cat._id);
-      
-      const level3Categories = await Category.find({ parentId: { $in: level2Ids }, level: 3 });
-      const level3Ids = level3Categories.map(cat => cat._id);
-      
-      const categoryCondition = {
-        $or: [
-          { category1Id: category1, category2Id: null },
-          { category2Id: { $in: level2Ids }, category3Id: null },
-          { category3Id: { $in: level3Ids } }
-        ]
-      };
-
-      if (search) {
-        query.$and = [
-          { $or: query.$or },
-          categoryCondition
-        ];
-        delete query.$or;
-      } else {
-        query.$or = categoryCondition.$or;
-      }
-    }
-
-    // Sorting
-    let sortOption: any = { createdAt: -1 };
-    if (sort === 'price-asc') sortOption = { price: 1 };
-    if (sort === 'price-desc') sortOption = { price: -1 };
-    if (sort === 'name') sortOption = { name: 1 };
-
-    const products = await Product.find(query)
-      .populate('category1Id category2Id category3Id')
-      .sort(sortOption)
-      .lean();
-
-    return NextResponse.json({ products });
-  } catch (error: any) {
-    console.error('Error fetching products:', error);
-    return NextResponse.json({ error: error.message }, { status: 500 });
+    return NextResponse.json(result);
+  } catch (error) {
+    return handleApiError(error);
   }
 }

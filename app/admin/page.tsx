@@ -1,10 +1,19 @@
 'use client';
 
 import { useEffect, useState } from 'react';
-import { useRouter } from 'next/navigation';
 import Link from 'next/link';
 import ProtectedRoute from '@/components/ProtectedRoute';
 import toast from 'react-hot-toast';
+
+interface RecentStockChange {
+  _id: string;
+  productId?: { name: string } | null;
+  change: number;
+  previousStock: number;
+  newStock: number;
+  reason?: string;
+  createdAt: string;
+}
 
 interface DashboardData {
   totalProducts: number;
@@ -12,13 +21,12 @@ interface DashboardData {
   lowStockProducts: { _id: string; name: string; stock: number; lowStockThreshold: number }[];
   outOfStockCount: number;
   outOfStockProducts: { _id: string; name: string }[];
-  recentStockChanges: any[];
+  recentStockChanges: RecentStockChange[];
 }
 
 export default function AdminDashboardPage() {
   const [data, setData] = useState<DashboardData | null>(null);
   const [loading, setLoading] = useState(true);
-  const router = useRouter();
 
   useEffect(() => {
     fetchDashboardData();
