@@ -8,9 +8,11 @@ import { NextResponse } from 'next/server';
  *
  * `/admin/login` is always allowed (otherwise unauthenticated users would be
  * redirected to it in a loop). Every other `/admin/*` path requires a JWT.
+ *
+ * Next 16 renamed the `middleware` file convention to `proxy`.
  */
 export default withAuth(
-  function middleware() {
+  function proxy() {
     return NextResponse.next();
   },
   {
