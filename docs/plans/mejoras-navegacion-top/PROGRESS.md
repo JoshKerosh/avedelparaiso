@@ -11,7 +11,7 @@ commits y dejar el "siguiente paso" claro para retomar sin contexto previo.
 
 | Fase | Archivo | Estado | Commit |
 |------|---------|--------|--------|
-| 1 — Navbar + layout + footer | [FASE-1](./FASE-1-navbar-layout-footer.md) | ✅ Completada | `194020a` |
+| 1 — Navbar + layout + footer | [FASE-1](./FASE-1-navbar-layout-footer.md) | ✅ Completada | `b9c8cb2` |
 | 2 — Catálogo + filtros | [FASE-2](./FASE-2-catalogo-filtros.md) | ⬜ Pendiente | — |
 | 3 — Detalle + tarjetas + home | [FASE-3](./FASE-3-detalle-tarjetas-home.md) | ⬜ Pendiente | — |
 | 4 — Idioma: estados + admin | [FASE-4](./FASE-4-idioma-estados-admin.md) | ⬜ Pendiente | — |
@@ -53,5 +53,5 @@ commits y dejar el "siguiente paso" claro para retomar sin contexto previo.
   Runtime (Playwright en localhost:3000): navbar/footer/skip-link OK, sesión admin muestra
   enlaces correctos, 0 errores de consola en `/` y `/products`.
 - Gaps: ninguno nuevo. (Home/products siguen en inglés → se traducen en Fases 2-3, planificado.)
-- Commit: `194020a`
+- Commit: `b9c8cb2`
 - Siguiente paso: **Fase 2** (catálogo + filtros).
