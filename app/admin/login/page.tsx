@@ -2,14 +2,12 @@
 
 import { useState } from 'react';
 import { signIn } from 'next-auth/react';
-import { useRouter } from 'next/navigation';
 import toast from 'react-hot-toast';
 
 export default function AdminLoginPage() {
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
   const [loading, setLoading] = useState(false);
-  const router = useRouter();
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -24,13 +22,17 @@ export default function AdminLoginPage() {
 
       if (result?.error) {
         toast.error(result.error);
+        setLoading(false);
       } else {
-        toast.success('¡Sesión iniciada!');
-        router.push('/admin');
+        // Hard navigation so the freshly-set session cookie is read on a clean
+        // load. A client-side router.push races the SessionProvider: ProtectedRoute
+        // on /admin can briefly see no session and bounce back to /admin/login
+        // (reliably reproduced on slower networks / Vercel). Keep `loading` true —
+        // the page is about to reload.
+        window.location.assign('/admin');
       }
     } catch {
       toast.error('Ocurrió un error. Inténtalo de nuevo.');
-    } finally {
       setLoading(false);
     }
   };
