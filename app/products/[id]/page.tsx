@@ -41,34 +41,49 @@ export default async function ProductDetailPage({
 
   const status = getStockStatus(product);
 
+  // Build catalog hrefs so each category in the path filters the catalog.
+  const c1 = product.category1Id;
+  const c2 = product.category2Id;
+  const c3 = product.category3Id;
+  const cat1Href = c1 ? `/products?category1=${c1._id}` : '';
+  const cat2Href = c1 && c2 ? `/products?category1=${c1._id}&category2=${c2._id}` : '';
+  const cat3Href =
+    c1 && c2 && c3 ? `/products?category1=${c1._id}&category2=${c2._id}&category3=${c3._id}` : '';
+
   return (
     <div className="min-h-screen bg-gray-50 dark:bg-gray-900">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
         {/* Breadcrumb */}
         <nav className="mb-8 flex items-center flex-wrap gap-2 text-sm text-gray-600 dark:text-gray-400">
           <Link href="/" className="hover:text-gray-900 dark:hover:text-white">
-            Home
+            Inicio
           </Link>
-          <span>/</span>
+          <span aria-hidden>/</span>
           <Link href="/products" className="hover:text-gray-900 dark:hover:text-white">
-            Products
+            Productos
           </Link>
-          {product.category1Id && (
+          {c1 && (
             <>
-              <span>/</span>
-              <span>{product.category1Id.name}</span>
+              <span aria-hidden>/</span>
+              <Link href={cat1Href} className="hover:text-gray-900 dark:hover:text-white">
+                {c1.name}
+              </Link>
             </>
           )}
-          {product.category2Id && (
+          {c2 && (
             <>
-              <span>/</span>
-              <span>{product.category2Id.name}</span>
+              <span aria-hidden>/</span>
+              <Link href={cat2Href} className="hover:text-gray-900 dark:hover:text-white">
+                {c2.name}
+              </Link>
             </>
           )}
-          {product.category3Id && (
+          {c3 && (
             <>
-              <span>/</span>
-              <span>{product.category3Id.name}</span>
+              <span aria-hidden>/</span>
+              <Link href={cat3Href} className="hover:text-gray-900 dark:hover:text-white">
+                {c3.name}
+              </Link>
             </>
           )}
         </nav>
@@ -95,36 +110,45 @@ export default async function ProductDetailPage({
 
               {product.stock > 0 && (
                 <p className="text-gray-700 dark:text-gray-300 mb-6">
-                  <span className="font-semibold">Availability:</span> {product.stock} units in stock
+                  <span className="font-semibold">Disponibilidad:</span> {product.stock} unidad{product.stock === 1 ? '' : 'es'} en stock
                 </p>
               )}
 
               {/* Category Path */}
-              {(product.category1Id || product.category2Id || product.category3Id) && (
+              {(c1 || c2 || c3) && (
                 <div className="mb-6">
                   <p className="text-sm text-gray-600 dark:text-gray-400 mb-2">
-                    <span className="font-semibold">Category:</span>
+                    <span className="font-semibold">Categoría:</span>
                   </p>
                   <div className="flex items-center flex-wrap gap-2 text-sm">
-                    {product.category1Id && (
-                      <span className="bg-gray-100 dark:bg-gray-700 text-gray-900 dark:text-white px-3 py-1 rounded-full">
-                        {product.category1Id.name}
-                      </span>
+                    {c1 && (
+                      <Link
+                        href={cat1Href}
+                        className="bg-gray-100 dark:bg-gray-700 text-gray-900 dark:text-white px-3 py-1 rounded-full hover:bg-blue-100 dark:hover:bg-blue-900/40"
+                      >
+                        {c1.name}
+                      </Link>
                     )}
-                    {product.category2Id && (
+                    {c2 && (
                       <>
-                        <span className="text-gray-400">→</span>
-                        <span className="bg-gray-100 dark:bg-gray-700 text-gray-900 dark:text-white px-3 py-1 rounded-full">
-                          {product.category2Id.name}
-                        </span>
+                        <span className="text-gray-400" aria-hidden>→</span>
+                        <Link
+                          href={cat2Href}
+                          className="bg-gray-100 dark:bg-gray-700 text-gray-900 dark:text-white px-3 py-1 rounded-full hover:bg-blue-100 dark:hover:bg-blue-900/40"
+                        >
+                          {c2.name}
+                        </Link>
                       </>
                     )}
-                    {product.category3Id && (
+                    {c3 && (
                       <>
-                        <span className="text-gray-400">→</span>
-                        <span className="bg-gray-100 dark:bg-gray-700 text-gray-900 dark:text-white px-3 py-1 rounded-full">
-                          {product.category3Id.name}
-                        </span>
+                        <span className="text-gray-400" aria-hidden>→</span>
+                        <Link
+                          href={cat3Href}
+                          className="bg-gray-100 dark:bg-gray-700 text-gray-900 dark:text-white px-3 py-1 rounded-full hover:bg-blue-100 dark:hover:bg-blue-900/40"
+                        >
+                          {c3.name}
+                        </Link>
                       </>
                     )}
                   </div>
@@ -133,7 +157,7 @@ export default async function ProductDetailPage({
 
               {/* Description */}
               <div className="border-t border-gray-200 dark:border-gray-700 pt-6">
-                <h2 className="text-xl font-semibold text-gray-900 dark:text-white mb-3">Description</h2>
+                <h2 className="text-xl font-semibold text-gray-900 dark:text-white mb-3">Descripción</h2>
                 <p className="text-gray-700 dark:text-gray-300 whitespace-pre-wrap leading-relaxed">
                   {product.description}
                 </p>
@@ -145,7 +169,7 @@ export default async function ProductDetailPage({
                   href="/products"
                   className="px-6 py-3 bg-gray-200 dark:bg-gray-700 text-gray-800 dark:text-white rounded-lg hover:bg-gray-300 dark:hover:bg-gray-600 transition-colors"
                 >
-                  Back to Products
+                  Volver a productos
                 </Link>
               </div>
             </div>

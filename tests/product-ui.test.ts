@@ -3,16 +3,16 @@ import { getMainImage, getStockStatus } from '@/lib/product-ui';
 
 describe('getStockStatus', () => {
   it('reports out of stock when stock is 0', () => {
-    expect(getStockStatus({ stock: 0, lowStockThreshold: 5 }).text).toBe('Out of Stock');
+    expect(getStockStatus({ stock: 0, lowStockThreshold: 5 }).text).toBe('Agotado');
   });
 
   it('reports low stock when at or below threshold', () => {
-    expect(getStockStatus({ stock: 5, lowStockThreshold: 5 }).text).toBe('Low Stock');
-    expect(getStockStatus({ stock: 3, lowStockThreshold: 5 }).text).toBe('Low Stock');
+    expect(getStockStatus({ stock: 5, lowStockThreshold: 5 }).text).toBe('Pocas unidades');
+    expect(getStockStatus({ stock: 3, lowStockThreshold: 5 }).text).toBe('Pocas unidades');
   });
 
   it('reports in stock when above threshold', () => {
-    expect(getStockStatus({ stock: 10, lowStockThreshold: 5 }).text).toBe('In Stock');
+    expect(getStockStatus({ stock: 10, lowStockThreshold: 5 }).text).toBe('Disponible');
   });
 });
 

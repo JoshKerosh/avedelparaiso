@@ -54,7 +54,16 @@ export default async function ProductsPage({
   return (
     <div className="min-h-screen bg-gray-50 dark:bg-gray-900">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-        <h1 className="text-3xl font-bold text-gray-900 dark:text-white mb-8">All Products</h1>
+        {/* Breadcrumb */}
+        <nav className="mb-6 flex items-center flex-wrap gap-2 text-sm text-gray-600 dark:text-gray-400" aria-label="Ruta de navegación">
+          <Link href="/" className="hover:text-gray-900 dark:hover:text-white">
+            Inicio
+          </Link>
+          <span aria-hidden>/</span>
+          <span className="text-gray-900 dark:text-white" aria-current="page">Productos</span>
+        </nav>
+
+        <h1 className="text-3xl font-bold text-gray-900 dark:text-white mb-8">Todos los productos</h1>
 
         <div className="flex flex-col lg:flex-row gap-8">
           {/* Filters Sidebar */}
@@ -66,12 +75,12 @@ export default async function ProductsPage({
           <div className="flex-1">
             {products.length === 0 ? (
               <div className="text-center py-12">
-                <p className="text-gray-500 dark:text-gray-400">No products found.</p>
+                <p className="text-gray-500 dark:text-gray-400">No se encontraron productos.</p>
               </div>
             ) : (
               <>
                 <p className="text-gray-600 dark:text-gray-400 mb-4">
-                  {total} product{total === 1 ? '' : 's'} found
+                  {total} producto{total === 1 ? '' : 's'} encontrado{total === 1 ? '' : 's'}
                 </p>
                 <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
                   {products.map((product) => (
@@ -81,32 +90,32 @@ export default async function ProductsPage({
 
                 {/* Pagination */}
                 {totalPages > 1 && (
-                  <nav className="mt-10 flex items-center justify-center gap-2" aria-label="Pagination">
+                  <nav className="mt-10 flex items-center justify-center gap-2" aria-label="Paginación">
                     {page > 1 ? (
                       <Link
                         href={buildHref(filters, page - 1)}
                         className="px-4 py-2 rounded-lg bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-600 text-gray-700 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-700"
                       >
-                        Previous
+                        Anterior
                       </Link>
                     ) : (
                       <span className="px-4 py-2 rounded-lg bg-gray-100 dark:bg-gray-800 border border-gray-200 dark:border-gray-700 text-gray-400 cursor-not-allowed">
-                        Previous
+                        Anterior
                       </span>
                     )}
                     <span className="px-4 py-2 text-sm text-gray-600 dark:text-gray-400">
-                      Page {page} of {totalPages}
+                      Página {page} de {totalPages}
                     </span>
                     {page < totalPages ? (
                       <Link
                         href={buildHref(filters, page + 1)}
                         className="px-4 py-2 rounded-lg bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-600 text-gray-700 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-700"
                       >
-                        Next
+                        Siguiente
                       </Link>
                     ) : (
                       <span className="px-4 py-2 rounded-lg bg-gray-100 dark:bg-gray-800 border border-gray-200 dark:border-gray-700 text-gray-400 cursor-not-allowed">
-                        Next
+                        Siguiente
                       </span>
                     )}
                   </nav>

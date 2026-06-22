@@ -98,29 +98,72 @@ export default function ProductFilters({ rootCategories, current }: ProductFilte
   const selectClass =
     'w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent bg-white dark:bg-gray-700 text-gray-900 dark:text-white';
 
+  const SORT_LABELS: Record<string, string> = {
+    'price-asc': 'Precio: menor a mayor',
+    'price-desc': 'Precio: mayor a menor',
+    name: 'Nombre: A-Z',
+  };
+
+  const catName = (list: CategoryRef[], id: string) => list.find((c) => c._id === id)?.name ?? '';
+
+  // Build the list of active filter "chips". Each chip knows how to remove itself.
+  const activeChips: { label: string; onRemove: () => void }[] = [];
+  if (current.search) {
+    activeChips.push({ label: `Búsqueda: "${current.search}"`, onRemove: () => { setSearchInput(''); pushFilters({ search: '' }); } });
+  }
+  if (current.category1) {
+    activeChips.push({ label: catName(rootCategories, current.category1) || 'Categoría', onRemove: () => pushFilters({ category1: '', category2: '', category3: '' }) });
+  }
+  if (current.category2) {
+    activeChips.push({ label: catName(categories2, current.category2) || 'Subcategoría', onRemove: () => pushFilters({ category2: '', category3: '' }) });
+  }
+  if (current.category3) {
+    activeChips.push({ label: catName(categories3, current.category3) || 'Sub-subcategoría', onRemove: () => pushFilters({ category3: '' }) });
+  }
+  if (current.sort && current.sort !== 'newest') {
+    activeChips.push({ label: SORT_LABELS[current.sort] ?? current.sort, onRemove: () => pushFilters({ sort: 'newest' }) });
+  }
+
   return (
     <div className={`bg-white dark:bg-gray-800 rounded-lg shadow p-6 sticky top-4 ${isPending ? 'opacity-70' : ''}`}>
       <div className="flex justify-between items-center mb-4">
-        <h2 className="text-lg font-semibold text-gray-900 dark:text-white">Filters</h2>
+        <h2 className="text-lg font-semibold text-gray-900 dark:text-white">Filtros</h2>
         <button
           onClick={clearFilters}
           className="text-sm text-blue-600 dark:text-blue-400 hover:text-blue-700 dark:hover:text-blue-300"
         >
-          Clear
+          Limpiar
         </button>
       </div>
+
+      {/* Active filter chips */}
+      {activeChips.length > 0 && (
+        <div className="flex flex-wrap gap-2 mb-6">
+          {activeChips.map((chip, i) => (
+            <button
+              key={i}
+              onClick={chip.onRemove}
+              className="inline-flex items-center gap-1 px-2.5 py-1 rounded-full text-xs bg-blue-100 text-blue-800 dark:bg-blue-900/40 dark:text-blue-200 hover:bg-blue-200 dark:hover:bg-blue-900/70"
+              aria-label={`Quitar filtro ${chip.label}`}
+            >
+              <span>{chip.label}</span>
+              <span aria-hidden className="font-semibold">×</span>
+            </button>
+          ))}
+        </div>
+      )}
 
       {/* Search */}
       <div className="mb-6">
         <label htmlFor="filter-search" className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
-          Search
+          Buscar
         </label>
         <input
           id="filter-search"
           type="text"
           value={searchInput}
           onChange={(e) => setSearchInput(e.target.value)}
-          placeholder="Search products..."
+          placeholder="Buscar productos..."
           className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent bg-white dark:bg-gray-700 text-gray-900 dark:text-white placeholder-gray-500 dark:placeholder-gray-400"
         />
       </div>
@@ -128,7 +171,7 @@ export default function ProductFilters({ rootCategories, current }: ProductFilte
       {/* Category Level 1 */}
       <div className="mb-6">
         <label htmlFor="filter-cat1" className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
-          Category
+          Categoría
         </label>
         <select
           id="filter-cat1"
@@ -136,7 +179,7 @@ export default function ProductFilters({ rootCategories, current }: ProductFilte
           onChange={(e) => pushFilters({ category1: e.target.value, category2: '', category3: '' })}
           className={selectClass}
         >
-          <option value="">All Categories</option>
+          <option value="">Todas las categorías</option>
           {rootCategories.map((cat) => (
             <option key={cat._id} value={cat._id}>
               {cat.name}
@@ -149,7 +192,7 @@ export default function ProductFilters({ rootCategories, current }: ProductFilte
       {current.category1 && categories2.length > 0 && (
         <div className="mb-6">
           <label htmlFor="filter-cat2" className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
-            Subcategory
+            Subcategoría
           </label>
           <select
             id="filter-cat2"
@@ -157,7 +200,7 @@ export default function ProductFilters({ rootCategories, current }: ProductFilte
             onChange={(e) => pushFilters({ category2: e.target.value, category3: '' })}
             className={selectClass}
           >
-            <option value="">All Subcategories</option>
+            <option value="">Todas las subcategorías</option>
             {categories2.map((cat) => (
               <option key={cat._id} value={cat._id}>
                 {cat.name}
@@ -171,7 +214,7 @@ export default function ProductFilters({ rootCategories, current }: ProductFilte
       {current.category2 && categories3.length > 0 && (
         <div className="mb-6">
           <label htmlFor="filter-cat3" className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
-            Sub-subcategory
+            Sub-subcategoría
           </label>
           <select
             id="filter-cat3"
@@ -179,7 +222,7 @@ export default function ProductFilters({ rootCategories, current }: ProductFilte
             onChange={(e) => pushFilters({ category3: e.target.value })}
             className={selectClass}
           >
-            <option value="">All</option>
+            <option value="">Todas</option>
             {categories3.map((cat) => (
               <option key={cat._id} value={cat._id}>
                 {cat.name}
@@ -192,7 +235,7 @@ export default function ProductFilters({ rootCategories, current }: ProductFilte
       {/* Sort */}
       <div>
         <label htmlFor="filter-sort" className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
-          Sort By
+          Ordenar por
         </label>
         <select
           id="filter-sort"
@@ -200,10 +243,10 @@ export default function ProductFilters({ rootCategories, current }: ProductFilte
           onChange={(e) => pushFilters({ sort: e.target.value })}
           className={selectClass}
         >
-          <option value="newest">Newest</option>
-          <option value="price-asc">Price: Low to High</option>
-          <option value="price-desc">Price: High to Low</option>
-          <option value="name">Name: A-Z</option>
+          <option value="newest">Más recientes</option>
+          <option value="price-asc">Precio: menor a mayor</option>
+          <option value="price-desc">Precio: mayor a menor</option>
+          <option value="name">Nombre: A-Z</option>
         </select>
       </div>
     </div>

@@ -16,15 +16,15 @@ export default function Error({
   return (
     <div className="min-h-screen bg-gray-50 dark:bg-gray-900 flex items-center justify-center px-4">
       <div className="text-center">
-        <h1 className="text-2xl font-semibold text-gray-900 dark:text-white">Something went wrong</h1>
+        <h1 className="text-2xl font-semibold text-gray-900 dark:text-white">Algo salió mal</h1>
         <p className="mt-2 text-gray-600 dark:text-gray-400">
-          An unexpected error occurred. Please try again.
+          Ocurrió un error inesperado. Inténtalo de nuevo.
         </p>
         <button
           onClick={reset}
           className="mt-6 px-6 py-3 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors"
         >
-          Try again
+          Reintentar
         </button>
       </div>
     </div>

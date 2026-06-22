@@ -26,11 +26,11 @@ export default function ProductsTable({
         <table className="min-w-full divide-y divide-gray-200 dark:divide-gray-700">
           <thead className="bg-gray-50 dark:bg-gray-700">
             <tr>
-              <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase">Image</th>
-              <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase">Name</th>
-              <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase">Price</th>
+              <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase">Imagen</th>
+              <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase">Nombre</th>
+              <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase">Precio</th>
               <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase">Stock</th>
-              <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase">Actions</th>
+              <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase">Acciones</th>
             </tr>
           </thead>
           <tbody className="bg-white dark:bg-gray-800 divide-y divide-gray-200 dark:divide-gray-700">
@@ -75,19 +75,19 @@ export default function ProductsTable({
                         onClick={(e) => { e.stopPropagation(); onViewHistory(product); }}
                         className="text-blue-600 hover:text-blue-900"
                       >
-                        History
+                        Historial
                       </button>
                       <button
                         onClick={(e) => { e.stopPropagation(); onEdit(product); }}
                         className="text-gray-600 hover:text-gray-900"
                       >
-                        Edit
+                        Editar
                       </button>
                       <button
                         onClick={(e) => { e.stopPropagation(); onDelete(product); }}
                         className="text-red-600 hover:text-red-900"
                       >
-                        Delete
+                        Eliminar
                       </button>
                     </div>
                   </td>

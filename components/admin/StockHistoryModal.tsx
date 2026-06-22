@@ -1,6 +1,7 @@
 'use client';
 
 import type { AdminProduct, StockHistoryItem } from '@/types/admin';
+import { getReasonLabel } from '@/lib/product-ui';
 
 interface StockHistoryModalProps {
   product: AdminProduct;
@@ -20,26 +21,26 @@ export default function StockHistoryModal({ product, history, onClose }: StockHi
         className="bg-white dark:bg-gray-900 rounded-lg p-6 w-full max-w-3xl m-4 max-h-[80vh] overflow-y-auto"
         onClick={(e) => e.stopPropagation()}
       >
-        <h2 className="text-xl font-bold text-gray-900 dark:text-gray-100 mb-4">Stock History: {product.name}</h2>
+        <h2 className="text-xl font-bold text-gray-900 dark:text-gray-100 mb-4">Historial de stock: {product.name}</h2>
 
         {history.length === 0 ? (
-          <p className="text-gray-500">No stock changes yet</p>
+          <p className="text-gray-500">Aún no hay cambios de stock</p>
         ) : (
           <table className="min-w-full divide-y divide-gray-200">
             <thead className="bg-gray-50 dark:bg-gray-800">
               <tr>
-                <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase">Date</th>
-                <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase">Change</th>
-                <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase">Reason</th>
-                <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase">Observations</th>
-                <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase">User</th>
+                <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase">Fecha</th>
+                <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase">Cambio</th>
+                <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase">Motivo</th>
+                <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase">Observaciones</th>
+                <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase">Usuario</th>
               </tr>
             </thead>
             <tbody className="bg-white dark:bg-gray-800 divide-y divide-gray-200 dark:divide-gray-700">
               {history.map((item) => (
                 <tr key={item._id} className="bg-white dark:bg-gray-900">
                   <td className="px-4 py-3 text-sm text-gray-900 dark:text-gray-100">
-                    {new Date(item.createdAt).toLocaleString()}
+                    {new Date(item.createdAt).toLocaleString('es-CR')}
                   </td>
                   <td className="px-4 py-3 text-sm">
                     <span
@@ -56,10 +57,10 @@ export default function StockHistoryModal({ product, history, onClose }: StockHi
                       ({item.previousStock} → {item.newStock})
                     </span>
                   </td>
-                  <td className="px-4 py-3 text-sm text-gray-900 dark:text-gray-100">{item.reason}</td>
+                  <td className="px-4 py-3 text-sm text-gray-900 dark:text-gray-100">{getReasonLabel(item.reason)}</td>
                   <td className="px-4 py-3 text-sm text-gray-900 dark:text-gray-100">{item.notes || ''}</td>
                   <td className="px-4 py-3 text-sm text-gray-900 dark:text-gray-100">
-                    {item.userId?.username || 'Unknown'}
+                    {item.userId?.username || 'Desconocido'}
                   </td>
                 </tr>
               ))}
